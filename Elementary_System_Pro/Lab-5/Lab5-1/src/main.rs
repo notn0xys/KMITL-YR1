@@ -55,9 +55,49 @@ impl Player {
         }
 
     }
-    fn Encounter(&self, x: Encounter, y:Vec<Enemy>) {
+    fn Encounter(&mut self, x: Encounter, y:Vec<Enemy>) {
         match x {
-            
+            Encounter::Bush => {
+                println!("You've found bush! Stamina -1");
+                self.stamina -= 2;
+
+            }
+            Encounter::Herb =>{
+                println!("You've found Herb! Power + 1");
+                self.power += 1;
+                self.stamina -= 1;
+            }
+            Encounter::IronOre => {
+                println!("You found Iron Ore! Power + 10");
+                self.power += 10;
+                self.stamina -= 1;
+            }
+            Encounter::Nothing =>{
+                println!("Found Nothing");
+                self.stamina -= 1;
+            }
+            Encounter::Meat =>{
+                println!("Found Meat");
+                self.stamina -= 1;
+                if self.hp >= self.hp_max  {
+                    println!("Max Hp reached");
+                    self.hp = self.hp_max;
+                }
+                else {
+                    println!("HP not max added 4 hp");
+                    self.hp += 4;
+                }
+            }
+            Encounter::Water => {
+                println!("Found water");
+                self.stamina += 1;
+            }
+            Encounter::Enemy => {
+                let n = rand::thread_rng().gen_range(1..100);
+                match n {
+                    
+                }
+            }
         }
     }
 }
