@@ -1,3 +1,6 @@
+use std::io;
+use rand::Rng;
+
 #[derive(Debug)]
 struct Player{
         hp:i32,
@@ -11,7 +14,6 @@ struct Enemy{
         hp:i32,
         stamina: i32,
         power:i32,
-        id:i32
     }
 enum Move {
         North,
@@ -40,8 +42,23 @@ impl Move {
 } 
 
 impl Player {
-    fn get_encounter(){
+    fn get_encounter() -> Encounter{
+        let n = rand::thread_rng().gen_range(1..100);
+        match n {
+            1..=17 => Encounter::Nothing,
+            18..=25 => Encounter::Bush,
+            26..=40 => Encounter::Meat,
+            41..=55 => Encounter::Water,
+            56..=70 => Encounter::Herb,
+            71..=75 => Encounter::IronOre,
+            _ => Encounter::Enemy
+        }
 
+    }
+    fn Encounter(&self, x: Encounter, y:Vec<Enemy>) {
+        match x {
+            
+        }
     }
 }
 
