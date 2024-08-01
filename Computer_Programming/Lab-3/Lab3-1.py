@@ -1,3 +1,7 @@
-for i in range(0,10):
-    if i > 5:
-        print("Hallows")
+import math
+x = int(math.pi)
+print(x)
+print(f"{math.pi:.2f}")
+print(f"{math.pi:e}")
+print(f"{math.pi:.2e}")
+
