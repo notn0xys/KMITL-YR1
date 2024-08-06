@@ -7,7 +7,7 @@ while True:
     print("Please enter an integer: ")
 small_gap = 0.2 * r
 top_move = r*2 + small_gap
-pensize(3)
+pensize(r/15)
 penup()
 backward(r * 2)
 pendown()

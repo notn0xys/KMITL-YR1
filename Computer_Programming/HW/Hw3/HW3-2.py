@@ -6,6 +6,7 @@ while True:
             x = int(x)
             break
         print("Not an integer")
-    print("Not 4 characters long")
+    else:
+        print("Not 4 characters long")
 print(x)
 
