@@ -1,10 +1,14 @@
 from turtle import *
 import math
-
-x1, y1 = map(int, input("Enter p1: ").split(","))
-x2 , y2 = eval(input("Enter P2 "))
-x3 , y3 = eval(input("Enter P3 "))
-
+print("Point1")
+x1 = int(input("Enter x1: "))
+y1 = int(input("Enter y1: "))
+print("Point2")
+x2 = int(input("Enter x2: "))
+y2 = int(input("Enter y2: "))
+print("Point3")
+x3 = int(input("Enter x3: "))
+y3 = int(input("Enter y3: "))
 distance_1 = math.sqrt((x2-x1)**2 + (y2-y1)**2)
 distance_2 = math.sqrt((x3-x2)**2 + (y3-y2)**2)
 distance_3 = math.sqrt((x1-x3)**2 + (y1-y3)**2)

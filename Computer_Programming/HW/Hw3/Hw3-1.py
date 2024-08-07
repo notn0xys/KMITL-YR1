@@ -19,7 +19,3 @@ print(f" Federal Withholding ({tax_withholding_rate:.1%}) : ${fed_taxed:.2f}")
 print(f" State Withholding ({state_tax_withholding:.1%}) : ${state_taxed:.2f}")
 print(f" Total Deduction : ${total_taxxed:.2f}")
 print(f"Net Pay : ${net_pay:.2f}")
-
-
-
-
