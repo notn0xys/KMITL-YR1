@@ -1,4 +1,4 @@
-Old = None
+Old = True
 store = 0
 for i in range(5):
     meow = 0
