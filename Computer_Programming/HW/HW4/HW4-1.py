@@ -12,7 +12,7 @@ if x3 - x1 != 0:
     slope = (y3-y1)/(x3-x1)
     c = y1 - (slope * x1)
     if y2 == (slope * x2) + c:
-        print("point 2 is on the line between point 1 and 3")
+        print("point 2 is on the line")
     else:
         if slope > 0:
             if y2 > (slope * x2) + c:
@@ -34,8 +34,7 @@ else:
         print("Point 2 is on the right")
     else:
         print("Point 2 is on the left")
-
-
+#Drawing the lines and coordinates.
 penup()
 goto(x1,y1)
 p = pos()
