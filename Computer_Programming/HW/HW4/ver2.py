@@ -4,8 +4,6 @@ def get_coords(points):
     x = float(input(f"Enter {points} x: "))
     y = float(input(f"Enter {points} y: "))
     return x,y
-
-print("Point1")
 x1 , y1 = get_coords("Point 1")
 x2 , y2 = get_coords("Point 2")
 x3 , y3 = get_coords("Point 3")
