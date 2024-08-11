@@ -1,5 +1,3 @@
-use std::result;
-
 fn swap_result<T1,T2>(a:Vec<T1>,b:Vec<T2>) -> (Vec<T2>,Vec<T1>) {
     return (b,a);
 }

@@ -51,9 +51,9 @@ enum Data_Type<T> {
 
 
 fn main() {
-    let mut int_store = Data_Store::<Data_Type<i32>>::new();
+    let mut int_store: Data_Store<Data_Type<i32>> = Data_Store::<Data_Type<i32>>::new();
     int_store.add_items(Data_Type::Number(42));
-    let mut float_store = Data_Store::<Data_Type<f64>>::new();
+    let mut float_store: Data_Store<Data_Type<f64>> = Data_Store::<Data_Type<f64>>::new();
     float_store.add_items(Data_Type::Number(3.14));
 
     let mut String_Store = Data_Store::<String>::new();
