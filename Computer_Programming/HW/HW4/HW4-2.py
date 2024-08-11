@@ -42,6 +42,8 @@ if overlap:
     print("It overlaps") 
 elif overlap and amount == 4:
     print("it is inside")
+else:
+    print("it does not overlap")
 penup()
 goto(x1,y1)
 pendown()
