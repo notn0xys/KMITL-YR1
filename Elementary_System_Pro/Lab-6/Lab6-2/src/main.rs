@@ -1,4 +1,3 @@
-use std::fmt;
 
 #[derive(Debug)]
 struct Data_Store<T>{
