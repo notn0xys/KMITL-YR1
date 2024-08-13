@@ -1,13 +1,12 @@
 from turtle import *
-print("Point1")
-x1 = float(input("Enter x1: "))
-y1 = float(input("Enter y1: "))
-print("Point2")
-x2 = float(input("Enter x2: "))
-y2 = float(input("Enter y2: "))
-print("Point 3")
-x3 = float(input("Enter x3: "))
-y3 = float(input("Enter y3: "))
+def get_coords(points):
+    print(points)
+    x = float(input(f"Enter {points} x: "))
+    y = float(input(f"Enter {points} y: "))
+    return x,y
+x1 , y1 = get_coords("Point 1")
+x2 , y2 = get_coords("Point 2")
+x3 , y3 = get_coords("Point 3")
 
 if x3 - x1 != 0:
     slope = (y3-y1)/(x3-x1)
