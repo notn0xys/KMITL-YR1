@@ -16,14 +16,17 @@ top2 = (y2 + w2/2)
 right2 = (x2 + l2/2)
 bottom_2 = (y2 - w2/2)
 
-if right1 > right2 and left1 < left2 and top1 > top2 and bottom1 < bottom_2:
-    print("It is inside")
-elif right2 > right1 and left2 < left1 and top2 > top1 and bottom_2 < bottom1:
-    print("It is inside")
-elif right1 < left2 or top1 < bottom_2 or left1 > right2 or bottom1 > top2:
-    print("It does not overlap") 
+if right1 == left2 or left1 == right2 or top1 == bottom1 or bottom1 == top2:
+    print("It does not overlap")
 else:
-    print("it overlaps")
+    if right1 > right2 and left1 < left2 and top1 > top2 and bottom1 < bottom_2:
+        print("It is inside")
+    elif right2 > right1 and left2 < left1 and top2 > top1 and bottom_2 < bottom1:
+        print("It is inside")
+    elif right1 < left2 or top1 < bottom_2 or left1 > right2 or bottom1 > top2:
+        print("It does not overlap") 
+    else:
+        print("it overlaps")
 penup()
 goto(x1,y1)
 pendown()
