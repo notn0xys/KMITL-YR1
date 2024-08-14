@@ -16,7 +16,7 @@ top2 = (y2 + w2/2)
 right2 = (x2 + l2/2)
 bottom_2 = (y2 - w2/2)
 
-if right1 == left2 or left1 == right2 or top1 == bottom1 or bottom1 == top2:
+if right1 == left2 or left1 == right2 or top1 == bottom_2 or bottom1 == top2:
     print("It does not overlap")
 else:
     if right1 > right2 and left1 < left2 and top1 > top2 and bottom1 < bottom_2:
