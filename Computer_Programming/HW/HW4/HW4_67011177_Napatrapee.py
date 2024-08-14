@@ -5,12 +5,12 @@ def get_coords(points):
     x = float(input(f"Enter {points} x: "))
     y = float(input(f"Enter {points} y: "))
     return x,y
+x0 , y0 = get_coords("Point 0")
 x1 , y1 = get_coords("Point 1")
 x2 , y2 = get_coords("Point 2")
-x3 , y3 = get_coords("Point 3")
 
-if x3 - x1 != 0:
-    slope = (y3-y1)/(x3-x1)
+if x1 - x0 != 0:
+    slope = (y1-y0)/(x1-x0)
     c = y1 - (slope * x1)
     if y2 == (slope * x2) + c:
         print("point 2 is on the line")
@@ -25,17 +25,16 @@ if x3 - x1 != 0:
         else:
             print("Point 2 is on the Left")
 else:
-    if x2 > x3:
+    if x2 > x1:
         print("Point 2 is on the right")
     else:
         print("Point 2 is on the left")
-#Drawing the lines and coordinates.
 penup()
-goto(x1,y1)
+goto(x0,y0)
 p = pos()
 write(p)
 pendown()
-goto(x3,y3)
+goto(x1,y1)
 p = pos()
 write(p)
 penup()
@@ -44,6 +43,7 @@ pendown()
 p = pos()
 write(p)
 done()
+
 
 #HW4-2
 from turtle import *
