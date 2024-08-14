@@ -15,12 +15,20 @@ impl BoxedStack {
         (*self.data).push(value);
     }
     fn pop(&mut self) -> Option<i32>{
-        (*self.data).pop()
+        if (*self.data).is_empty(){
+            println!("Nothing left in the stack");
+            return None;
+        }
+        else{
+            println!("Removed Top of the stack");
+            (*self.data).pop()
+
+        }
     }
-    fn peek(&mut self) -> Option<i32>{
+    fn peek(&mut self) -> Option<&i32>{
         let lenght = (*self.data).len() - 1;
         if !(*self.data).is_empty(){
-            Some((*self.data)[lenght])
+            Some(&(*self.data)[lenght])
         }
         else{
             None
@@ -60,7 +68,7 @@ fn main() {
     let b = nyah.peek();
     match b {
         Some(num) => {
-            println!("{num}");
+            println!("{}", num);
         }
         None => println!("Nothing left in the stack"),
     }
