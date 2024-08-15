@@ -1,5 +1,12 @@
-import math
-n = int(input("Enter a number: "))
+while True:
+    n = input("Enter an integer: ")
+    if n.isdigit():
+        n = int(n)
+        if n > 0:
+            break
+        print("More than 0")
+    else:
+        print("Enter a positive int")
 
 for i in range(n):
     l = n - i
