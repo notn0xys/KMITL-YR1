@@ -11,6 +11,6 @@ fn fac(x:i32) -> i32{
 }
 
 fn main(){
-    let a = fac(5);
+    let a = fac(10);
     println!("Factorial Result: {a}");
 }
