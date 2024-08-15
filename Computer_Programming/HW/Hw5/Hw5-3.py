@@ -1,0 +1,15 @@
+import math
+n = int(input("Enter a number: "))
+
+for i in range(n):
+    l = n - i
+    if i == 0 or i == n - 1:
+        for i in range(l):
+            print("*" * (i + 1))
+        for i in range(l - 1):
+            print("*" * (l - (i + 1)))
+    else:
+        for i in range(1,l):
+            print("*" * (i + 1))
+        for i in range(l - 1):
+            print("*" * (l - (i + 1)))
