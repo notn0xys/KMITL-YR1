@@ -1,5 +1,5 @@
 while True:
-    n = input("Enter an integer: ")
+    n = input("Enter an integer that is greater than or equal to 1: ")
     if n.isdigit():
         n = int(n)
         if n > 0:
