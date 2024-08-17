@@ -24,7 +24,7 @@ while i <= 12:
         pendown()
     if i == 9:
         penup()
-        goto(meow1 - ((lenght * 7) - 25 ) * 2,meow2)
+        goto(meow1 - ((lenght * 7) - 25 ) * 2 - 50,meow2)
         pendown()
     if i == 3 or i == 6:
         extra = 8
