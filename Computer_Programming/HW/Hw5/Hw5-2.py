@@ -14,6 +14,7 @@ left(90)
 penup()
 forward(350)
 right(90)
+speed("fastest")
 meow = pos()
 meow1 , meow2 = meow
 pendown()
@@ -24,7 +25,7 @@ while i <= 12:
         pendown()
     if i == 9:
         penup()
-        goto(meow1 - ((lenght * 7) - 25 ) * 2 - 50,meow2)
+        goto(meow1 - ( ((lenght * 7) - 25 ) * 2 ) - 100 ,meow2)
         pendown()
     if i == 3 or i == 6:
         extra = 8
@@ -117,6 +118,8 @@ while i <= 12:
                     write(temp_days,font=("Arial", 10, "normal"))
                     if temp_days == amount_of_days:
                         last_date = counter
+                        if last_date == 8:
+                            last_date = 1
                         print(temp_days) 
                     temp_days += 1
                     
