@@ -125,7 +125,6 @@ while i <= 12:
                     
                 forward(lenght * (3/4))
                 m += 1
-
             k  += 1
             counter = 1
             print(last_date)
