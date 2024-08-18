@@ -120,7 +120,6 @@ while i <= 12:
                         last_date = counter
                         if last_date == 8:
                             last_date = 1
-                        print(temp_days) 
                     temp_days += 1
                     
                 forward(lenght * (3/4))
@@ -135,7 +134,7 @@ while i <= 12:
                 left(90)
         j += 1
     penup()
-    forward(20)
+    forward(25)
     left(90)
     pendown()
     temp_days = 1
