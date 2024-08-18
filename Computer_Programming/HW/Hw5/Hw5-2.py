@@ -126,7 +126,6 @@ while i <= 12:
                 m += 1
             k  += 1
             counter = 1
-            print(last_date)
             backward(lenght * 7)
             right(90)
             if j != extra - 1:
