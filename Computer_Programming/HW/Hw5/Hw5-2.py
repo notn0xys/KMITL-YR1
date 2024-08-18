@@ -1,7 +1,6 @@
 from turtle import *
 i = 1
 j = 0
-k = 0
 sq = 0
 temp_days = 1
 counter = 0
@@ -74,7 +73,6 @@ while i <= 12:
                 write(list_of_days[m],font=("Arial", 10, "normal"))
                 forward(lenght * (3/4))
                 m += 1
-            k  += 1
             backward(lenght * 7)
             right(90)
             if j != 6:
@@ -96,7 +94,6 @@ while i <= 12:
                     temp_days += 1
                 forward(lenght * (3/4))
                 m += 1
-            k  += 1
             backward(lenght * 7)
             right(90)
             if j != 6:
@@ -121,10 +118,8 @@ while i <= 12:
                         if last_date == 8:
                             last_date = 1
                     temp_days += 1
-                    
                 forward(lenght * (3/4))
                 m += 1
-            k  += 1
             counter = 1
             backward(lenght * 7)
             right(90)
@@ -138,4 +133,5 @@ while i <= 12:
     pendown()
     temp_days = 1
     i += 1
+hideturtle()
 done()
