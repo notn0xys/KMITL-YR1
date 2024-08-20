@@ -1,7 +1,6 @@
 from turtle import *
 i = 1
 j = 0
-sq = 0
 temp_days = 1
 counter = 0
 last_date = 2
