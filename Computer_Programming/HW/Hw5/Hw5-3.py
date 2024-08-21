@@ -7,7 +7,8 @@ while True:
         print("More than 0")
     else:
         print("Enter a positive int")
-
+print(f"Input: {n}")
+print("")
 for i in range(n):
     l = n - i
     if i == 0 or i == n - 1:

@@ -12,6 +12,7 @@ guess = n / 2
 time5 = 0
 time6 = 0
 time7 = 0
+square_root = n ** (1/2)
 for i in range(7):
     temp = n / guess
     guess = (guess + temp) / 2
@@ -21,7 +22,6 @@ for i in range(7):
         time6 = guess
     if i == 6:
         time7 = guess
-print(f"When done 5 times you get {time5:.3f} ")
-print(f"When done 6 times you get {time6:.3f} ")
-print(f"When done 7 times you get {time7:.3f} ")
-print("The result is that when done 5,6,7 times and round up the decimal points the values are the same")
+print(f"When done 5 times you get {time5:.3f} actual square root is {square_root:.3f}")
+print(f"When done 6 times you get {time6:.3f} actual square root is {square_root:.3f} ")
+print(f"When done 7 times you get {time7:.3f} actual square root is {square_root:.3f} ")
