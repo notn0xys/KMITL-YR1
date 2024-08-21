@@ -2,6 +2,7 @@ use std::fs::{self, File};
 use std::io::{self, BufRead, Write};
 use std::path::Path;
 use std::process::exit;
+use std::ptr::NonNull;
 
 fn main() {
     let mut file_name: Option<String> = None;  // Use Option to track if a file is open
@@ -88,6 +89,10 @@ fn open_file(file_content: &mut Vec<String>, meow:&str) -> Option<String> {
         let mut create_new = String::new();
         io::stdin().read_line(&mut create_new).expect("Failed to read line");
         if create_new.trim().eq_ignore_ascii_case("y") {
+            if meow.len() == 0{
+                println!("Cannot create a file without a name.");
+                return None
+            }
             file_content.clear();
             println!("New file created. You can now add lines and save the file.");
             Some(file_name)  // Return the new file name
