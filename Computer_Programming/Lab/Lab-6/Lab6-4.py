@@ -5,5 +5,6 @@ def nyah (x):
             i = int(i)
             total += i
     print(total)
-1
-nyah("23meownyah4")
+
+nayh = input("Enter sth: ")
+nyah(nayh)
