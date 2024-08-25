@@ -13,7 +13,7 @@ def print_score(a):
         grade = "F"
     else:
         grade = "Invalid nyan"
-    print(grade)
+    return grade
 
 for i in range(10):
-    print_score(random.randint(50,100))
+   print( print_score(random.randint(50,100)))

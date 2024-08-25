@@ -1,4 +1,5 @@
 def nyah (x):
+    x = str(x)
     total = 0
     for i in x:
         if i.isdigit():
@@ -6,5 +7,4 @@ def nyah (x):
             total += i
     print(total)
 
-nayh = input("Enter sth: ")
-nyah(nayh)
+nyah("")

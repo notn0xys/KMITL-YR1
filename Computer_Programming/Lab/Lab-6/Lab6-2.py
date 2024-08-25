@@ -1,31 +1,11 @@
-def reverse(str):
-   return str[::-1]
-def is_prime(n):
-    if n < 2:
-        return False
-    i = 2
-    while i*i <= n:
-        if n % i == 0:
-            return False
-        i += 1
-    return True
-
-i = 1
-row = 0
-num = 13
-while i <= 100:
-    need_print = False
-    if is_prime(num):
-        reversed111 = int(reverse(str(num)))
-        if is_prime(reversed111):
-            need_print = True
-    
-    if need_print:
-        i += 1
-        if row < 10:
-            print(f"{num} " ,end="")
-        else:
-            print(num)
-            row = 0
-        row += 1
-    num += 1
+from turtle import *
+def draw(x):
+    for i in range(4):
+        forward(x)
+        left(90)
+def controll(u):
+    for i in range(4):
+        for j  in range(4): draw(u * (j + 1))
+        left(90)
+controll(50)
+done()
