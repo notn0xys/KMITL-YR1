@@ -12,6 +12,9 @@ def draw_box(l,h):
         left(90)
 
 def calendar_of_2024(n):
+    if n > 12:
+        print("Invalid Month")
+        return "invalid Month"
     mo_dates = [31,29,31,30,31,30,31,31,30,31,30,31]
     tracker = 1
     start_date = [0,3,4,0,2,5,0,3,6,1,4,6]
@@ -66,15 +69,7 @@ def calendar_of_2024(n):
                 go_back(l,h)
             else:
                 backward(l*7)
+    return None
 speed("fastest")
-while True:
-    n = input("Type a month: ")
-    if n.isdigit():
-        n = int(n)
-        if n <= 12:
-            break
-        else:
-            print("Invalid Month")
-    print("Try agian")
-calendar_of_2024(n)
+calendar_of_2024(8)
 done()

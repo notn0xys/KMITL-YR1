@@ -2,6 +2,8 @@ def time(x):
     new = x.split(":")
     hr = int(new[0])
     minutes = int(new[1])
+    if hr > 23 or minutes > 59:
+        return "Invalid hour"
     after = ""
     if hr >= 12 and hr != 24:
         after = "PM"
@@ -24,4 +26,4 @@ def time(x):
         newminutes = str(minutes)
     total = newhr + ":" + newminutes + " " + after
     return total
-print(time("19:20"))
+print(time("23:24"))
