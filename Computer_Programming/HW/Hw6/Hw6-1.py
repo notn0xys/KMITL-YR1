@@ -1,16 +1,27 @@
-def time24hrto12hr(time):
-    split = time.split(":")
-    new = int(split[0])
-    if new > 12:
-        hr = new - 12
-        hr = str(hr)
+def time(x):
+    new = x.split(":")
+    hr = int(new[0])
+    minutes = int(new[1])
+    after = ""
+    if hr >= 12 and hr != 24:
+        after = "PM"
+        if hr == 12:
+            hr = 12
+        else:
+            hr -= 12
+    elif hr == 24:
+        after = "AM"
+        hr = 0
     else:
-        hr = split[0]
-    if new in range(0, 13) or int(split[0]) == 24:
-        date = "AM"
+        after = "AM"
+    if hr < 10:
+        newhr = "0" + str(hr)
     else:
-        date = "PM"
-    Full_Time = hr + ":" + split[1] + " " + date 
-    return Full_Time
-
-print(time24hrto12hr("23:24"))
+        newhr = str(hr)
+    if minutes < 10:
+        newminutes = "0" + str(minutes)
+    else:
+        newminutes = str(minutes)
+    total = newhr + ":" + newminutes + " " + after
+    return total
+print(time("19:20"))
