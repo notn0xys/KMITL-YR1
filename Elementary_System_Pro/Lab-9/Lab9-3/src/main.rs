@@ -13,7 +13,7 @@ fn view<T>(o: &T) -> &[u8] {
     }
 }
 fn main() {
-    let data = Data {
+    let data: Data = Data {
         num:1030,
         character:'f',
         boool:true
