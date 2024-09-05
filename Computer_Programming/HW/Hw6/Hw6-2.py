@@ -34,7 +34,6 @@ def calendar_of_2024(n):
                 left(90)
                 forward(h)
                 left(90)
-            print(len(display_month))
             forward((l * 7/2) - (len(display_month)* 2) -5 )
             write(display_month)
             backward((l * 7/2) - (len(display_month) * 2) -5)
@@ -71,5 +70,5 @@ def calendar_of_2024(n):
                 backward(l*7)
     return None
 speed("fastest")
-calendar_of_2024(8)
+calendar_of_2024(1)
 done()

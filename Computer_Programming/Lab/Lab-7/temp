@@ -1,0 +1,7 @@
+        
+circle_1 = circle1(100,200,100)
+circle_1.draw()
+print(circle_1.get_area())
+print(circle_1.get_per())
+circle_1.move(200,100)
+circle_1.draw()
