@@ -33,7 +33,10 @@ class Rectangle:
         else:
             if left1 >= left2 and left1 <= right2:
                 new_x = left1
-                new_l = abs(left1 - right2)
+                if right1 < right2:
+                    new_l = right1 - left1
+                else:
+                    new_l = abs(left1 - right2)
                 print("left")
 
             elif right1 >= left2 and right1 <= right2:
@@ -41,18 +44,22 @@ class Rectangle:
                 new_x = right1 - new_l
                 print("right")
             else:
-                print("wtf")
+                if right1 > right2 and left1 < left2:
+                    new_x = left2
+                    new_l = right2 - left2
+                else:
+                    new_x = left1
+                    new_l = right1 - left1      
             if top1 >= bot2 and bot1 <= bot2:
                 new_y = top1
                 new_w = top1 - bot2
                 print("top")
-            elif bot1 <= top2 and bot2 <= bot1:
+            if bot1 <= top2 and bot2 <= bot1:
                 new_w = top2 - bot1
                 new_y = bot1 + new_w
-                print("bot")          
-
+                print("bot")         
             else:
-                print("wtf")
+                print("wtf2")
         return_rec = Rectangle(new_x,new_y,new_l,new_w)
         return return_rec
     def draw(self):
@@ -82,11 +89,13 @@ class circle1:
         goto(self.x, self.y - self.r)
         pendown()
         circle(self.r)
-rec1 = Rectangle(100,200,200,150)
-rec2 = Rectangle(0,100,300,350)
+rec2 = Rectangle(5,7,4,3)
+rec1 = Rectangle(6,8,3,4)
 rec1.draw()
 rec2.draw()
 rec3 = rec1.intersec(rec2)
 print(f"{rec3.x} + {rec3.y} + {rec3.w} + {rec3.h}")
+rec3.draw()
+rec3.move(-200,-200)
 rec3.draw()
 done()
