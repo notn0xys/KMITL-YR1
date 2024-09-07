@@ -36,23 +36,27 @@ class Poly:
             l[i] *= x
         return Poly(tuple(l))        
     def print(self):
+        counter = 0
         val = list(self.val)
         for i in range(len(val)):
             if val[i] != 0:
-                if i == 0:
-                    print(f"{val[i]} ", end="")
-                elif i == 1:
-                    if isNeg((val[i])):
-                        print("- ",end="")
+                if counter == 0:
+                    if i == 0:
+                        print(f"{val[i]} ", end="")
+                    elif i == 1:
+                        print(f"{val[i]}x ",end="")
                     else:
-                        print("+ ",end="")
-                    print(f"{abs(val[i])}x ",end="")
+                        print(f"{val[i]}x^{i} ",end="")
+                    counter += 1
                 else:
                     if isNeg((val[i])):
                         print("- ",end="")
                     else:
                         print("+ ",end="")
-                    print(f"{abs(val[i])}x^{i} ",end="")
+                    if i == 1:
+                        print(f"{abs(val[i])}x ",end="")
+                    else:
+                        print(f"{abs(val[i])}x^{i} ",end="")
             if i == len(val) - 1:
                 print()      
     def add(self,p):
