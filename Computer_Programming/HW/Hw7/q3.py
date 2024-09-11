@@ -33,3 +33,6 @@ class Linear_Equations:
             return ((self.__a * self.__f) - (self.__e * self.__c)) / ((self.__a * self.__d) - (self.__b * self.__c))
         else:
             return None
+p = Linear_Equations(3,2,5,6,3,76)
+print(p.getX())
+print(p.getY())
