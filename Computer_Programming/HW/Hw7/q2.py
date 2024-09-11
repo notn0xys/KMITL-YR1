@@ -64,7 +64,6 @@ class Poly:
         is1onger = True
         obj_1 = list(self.val)
         obj_2 = list(p.val)
-        i = 0
         while i < len(obj_1) and i < len(obj_2):
             if len(obj_1) > len(obj_2):
                 is1onger = True
@@ -82,7 +81,6 @@ class Poly:
         for i in range(len(self.val)):
             result += self.val[i] * (x**i)
         print(result)
-        return result
     def diff(self):
         return_list = []
         for i in range(1,len(self.val)):
@@ -101,8 +99,9 @@ l.power(0).print()
 l.power(3).print()
 p = Poly((1,0,0,0,2))
 m = Poly((1,1))
-h = p.multiply(m).print()
-mn = l.add(q)
-mn.diff().print()
-noxu = Poly((0,2,5))
-noxu.integrate().print()
+h = p.multiply(m)
+h.print()
+h.integrate().print()
+lol  = h.integrate()
+lol.diff().print()
+l.power(10).print()

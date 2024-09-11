@@ -12,8 +12,8 @@ class Clock:
         self.__h = int(time_split[0])
         self.__mins = int(time_split[1])
         self.__s = int(time_split[2])
-    def display_time(self):
-        print(f"{self.__h:02}:{self.__mins:02}:{self.__s:02}")
+    def get_time(self):
+        return(f"{self.__h:02}:{self.__mins:02}:{self.__s:02}")
     def tick(self):
         self.__s += 1
     def display_12hr(self):
@@ -26,6 +26,6 @@ class Clock:
             after = "AM"
         print(f"{self.__h:02}:{self.__mins:02}:{self.__s:02} {after}")
 clock = Clock()
-clock.set_time("9:04")
-clock.display_time()
+clock.set_time("23:04")
+print(clock.get_time())
 clock.display_12hr()
