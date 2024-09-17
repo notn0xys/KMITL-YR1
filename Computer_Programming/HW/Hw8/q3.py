@@ -1,5 +1,5 @@
 from turtle import *
-l = 45
+l = 20
 def draw_arrow(l=10):
     fillcolor("black")
     left(90)
