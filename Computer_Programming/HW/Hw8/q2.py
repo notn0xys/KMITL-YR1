@@ -8,7 +8,5 @@ for i in character:
 if " " in meow:
   del meow[" "]
 adjusted_length = len(character.replace(" ", ""))
-print(character)
-print(meow)
 for i in meow:
-    print(f"Letter {i} percent {meow[i]/adjusted_length:.2%}")
+    print(f"Char {i} percent {meow[i]/adjusted_length:.2%}")
