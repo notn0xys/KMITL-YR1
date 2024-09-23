@@ -8,7 +8,7 @@ class sol():
         self.canvas.bind("<Button-3>" , self.remover)
         root.mainloop()
     def checker(self,event):
-        self.canvas.create_oval(event.x-10,event.y+10,event.x+10,event.y-10,fill="white")
+        self.canvas.create_oval(event.x-20,event.y+20,event.x+20,event.y-20,fill="white")
     def remover(self,event):
         overlap = self.canvas.find_overlapping(event.x,event.y,event.x,event.y)
         for i in overlap:
