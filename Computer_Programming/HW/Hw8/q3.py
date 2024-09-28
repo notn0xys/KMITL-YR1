@@ -29,6 +29,7 @@ forward(l * max_val)
 draw_arrow()
 backward(l * max_val)
 right(90)
+
 for i in meow:
     forward(l)
     right(90)

@@ -6,7 +6,8 @@ class solution():
         root.title("KMITL Phone")
         self.text = tk.StringVar()
         self.text.set("")
-        l1 = tk.Label(textvariable=self.text,width=30).grid(row=0,column=0,columnspan=2)
+        self.l1 = tk.Text(root,width=30,height=2)
+        self.l1.grid(row=0,column=0,columnspan=3)
         b1 = tk.Button(text=1,width=10,height=5,command = lambda: self.add("1")).grid(row=1,column=0)
         b2 = tk.Button(text=2,width=10,height=5,command = lambda: self.add("2")).grid(row=1,column=1)
         b3 = tk.Button(text=3,width=10,height=5,command = lambda: self.add("3")).grid(row=1,column=2)
@@ -23,14 +24,16 @@ class solution():
         b14 = tk.Button(text="<",width=15,height=5,command = self.remove).grid(row=5,column=1,columnspan=1)
         root.mainloop()
     def remove(self):
-        y = self.text.get()
+        y = self.l1.get("1.0", "end-1c")
         y = y[:-1]
-        self.text.set(y)
+        self.l1.delete('1.0', tk.END)
+        self.l1.insert(tk.END, y)
     def dail(self):
-        y = self.text.get()
+        y = self.l1 .get("1.0", "end-1c")
         messagebox.showinfo("dialing",f"Dialing <{y}>")
     def add(self,x):
-        y = self.text.get()
+        y = self.l1.get("1.0", "end-1c")
         z = y + x
-        self.text.set(z)
+        self.l1.delete('1.0', tk.END)
+        self.l1.insert(tk.END, z)
 solution()
