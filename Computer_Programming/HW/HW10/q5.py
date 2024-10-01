@@ -15,4 +15,4 @@ def isAnagram(s1:str,s2:str):
        return False
     else:
        return True
-print(isAnagram("silent","lissten"))
+print(isAnagram("silent","listen"))

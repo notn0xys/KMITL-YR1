@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt 
-import numpy as np
-
 def pie_chart(x:list):
     nyan1 = dict()
     for i in x:
