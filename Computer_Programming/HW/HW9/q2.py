@@ -15,7 +15,7 @@ class sp():
         pass
 class main():
     def __init__(self) -> None:
-        my_img = ctk.CTkImage(dark_image=PIL.Image.open("wtf.jpg"), light_image=Image.open("wtf.jpg"),size=(43,43))
+        my_img = ctk.CTkImage(dark_image=PIL.Image.open("hi\wtf.jpg"), light_image=Image.open("hi\\wtf.jpg"),size=(43,43))
         self.search_mode = False
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("green")
