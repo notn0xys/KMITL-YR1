@@ -95,7 +95,7 @@ class PermEmployee(Employee):
     def get_status(self):
         return self.status
 class Department():
-    def __init__(self,d = "One of the departments of all time", name = "") -> None:
+    def __init__(self,name = "",d = "One of the departments of all time") -> None:
         self.name = name
         self.description = d
         self.manager = "None"
@@ -118,9 +118,12 @@ x = Name("Mr", "John", "Pork")
 y = Date(15,6,2023)
 addy = Adress("45","Wok")
 L = PermEmployee(x,y,addy,"15 Aug 2024","", 100)
+x = Name("Ms", "Marcus", "Pork")
+M = PermEmployee(x,y,addy,"15 Aug 2024","", 200)
 L.print_info()
-cat = Department("yea","cat")
+cat = Department("I NATE HIGGAS")
 cat.addEmployee(L)
+cat.addEmployee(M)
 cat.print_info()
 L.print_info()
 cat.setManager(L)
