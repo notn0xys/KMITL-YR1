@@ -1,5 +1,7 @@
 import customtkinter as ctk
-
+import PIL
+from PIL import Image
+import PIL.Image
 class search():
     def __init__(self) -> None:
         self.root = ctk.CTk()
@@ -7,12 +9,14 @@ class search():
         pass
     def on_home(self):
         pass
-    def make_page(self,x:dict):
+    def make_page(self,x:dict = {}):
         for widget in self.root.winfo_children():
             widget.destroy()
-        name = x["name"]
-        search_button = ctk.CTkButton(self.root, width=50,height=50,command=self.on_search, bg_color="transparent").place(x = 1075, y = 0)
-        home = ctk.CTkButton(self.root, width=50,height=50,command=self.on_home, bg_color="transparent").place(x = 1200, y = 0)
+        home_img = ctk.CTkImage(dark_image=PIL.Image.open("imgs\\home.png"), light_image=Image.open("imgs\\home.png"),size=(43,43),)
+        my_img = ctk.CTkImage(dark_image=PIL.Image.open("imgs\\wtf.png"), light_image=Image.open("imgs\\wtf.png"),size=(43,43),)
+        search_button = ctk.CTkButton(self.root, width=50,height=50,command=self.on_search, image=my_img,bg_color="transparent",text="").place(x = 1400, y = 3)
+        home = ctk.CTkButton(self.root, width=50,height=50,command=self.on_home,image=home_img,bg_color="transparent",text="").place(x = 1470, y = 3)
+
     def create_page(self):
         pass
     def scroll(self,x:list,search_mode:bool):
