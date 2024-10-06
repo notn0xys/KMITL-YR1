@@ -10,6 +10,7 @@ from ip import search
 class sp(search):
     def __init__(self,root):
         super().__init__()
+        self.count = 0
         self.root = root
         self.create_page()
         print("In seach")
@@ -28,11 +29,13 @@ class sp(search):
         Home = ctk.CTkButton(self.root, width=50,height=50,command=self.on_home, image=home_img,bg_color="transparent",text="").place(x = 1150, y = 0)
         for i in range(4):
             b = ctk.CTkButton(self.root, width=400 , height= 275 , text = f"Car{i + 1}", command= self.make_page,).grid(row = 1 + i//2, column = i // 2 + 1, pady = 15,padx = 20,sticky="w")
-        
-        
+        testbtn = ctk.CTkButton(self.root, width=50,height=50,command=self.on_search, image=my_img,bg_color="transparent",text="").place(x = 500, y = 200)
+    def add(self):
+        self.count += 1 
     def on_search(self):
         self.create_page()
     def on_home(self):
         from mp import main_page
         print("moving to main page")
         main_page(self.root)
+        sp.destroy()
