@@ -53,6 +53,6 @@ class AlarmClock(Clock):
             self.recalc()
 
 b = AlarmClock(12,23,5)
-b.setAlarmtime(12,23,20)
+b.setAlarmtime(12,23,10)
 b.alarm_on()
 b.run()
