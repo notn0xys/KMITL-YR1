@@ -1,3 +1,23 @@
+def textese(s:str,ref:dict):
+    keys = list(ref.keys())
+    reverse = keys[::-1]
+    for i in reverse:
+        s = s.replace(i, ref[i])
+    return s
+def untextese(s:str,ref:dict):
+    list_of_vals = list(ref.values())
+    list_of_keys = list(ref.keys())
+    list_of_keys = list_of_keys[::-1]
+    list_of_vals = list_of_vals[::-1]
+    string_list = s.split()
+    for i in range(len(string_list)):
+        try:
+            position = list_of_vals.index(string_list[i])
+            string_list[i] = list_of_keys[position]
+        except:
+            continue
+    e = " ".join(string_list)
+    return e
 abbreviations = {
     "be": "b",
     "because": "cuz",
@@ -34,3 +54,8 @@ abbreviations = {
     "Rolling on the floor laughing": "rofl",
     "Talk to you later": "ttyl"
 }
+s = "be As far as I know By the way gyaaat Talk to you later"
+l = textese(s,abbreviations)
+print(l)
+l = untextese(l,abbreviations)
+print(l)
