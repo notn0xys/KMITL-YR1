@@ -1,0 +1,1 @@
+C:\Users\user\Documents\GitHub\KMITL-YR1\Elementary_System_Pro\Lab\ exam\ L\ ques\easy\target\debug\easy.exe: C:\Users\user\Documents\GitHub\KMITL-YR1\Elementary_System_Pro\Lab\ exam\ L\ ques\easy\src\main.rs
