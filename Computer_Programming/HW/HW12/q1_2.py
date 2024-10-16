@@ -186,7 +186,7 @@ class Char8(Char):
             left(90)
         left(90)
         forward(20)
-        right(20)
+        right(90)
         forward(20)
     def getWidth(self):
         return 20
