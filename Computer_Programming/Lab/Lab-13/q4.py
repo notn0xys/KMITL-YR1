@@ -10,5 +10,5 @@ def cross(l,d):
             cross(l/2,d-1)
             backward(l)
             right(90)
-cross(200,6)
+cross(125,5)
 done()
