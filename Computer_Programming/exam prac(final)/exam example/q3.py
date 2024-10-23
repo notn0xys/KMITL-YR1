@@ -1,13 +1,13 @@
-def count_operands(x:tuple,count = 0,tracker = []):
+def count_operands(x:tuple):
     if len(x) == 0:
-        return count
+        return 0
     else:
+        count = 0
         lot = list(x)
         y = lot.pop()
-        if type(y) == int and y not in tracker:
-            tracker.append(y)
-            count += 1
+        if type(y) == int:
+            count = 1
         elif type(y) == tuple:
-            count =  count_operands(y,count,tracker)
-        return count_operands(tuple(lot),count,tracker)
-print(count_operands((3, '/',3)))
+            count += count_operands(y)
+        return count + count_operands(tuple(lot))
+print(count_operands((((((2, '+', 4), '/', 3), '*', 2), '+', (3, '**', 4)))))

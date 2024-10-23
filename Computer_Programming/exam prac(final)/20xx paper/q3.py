@@ -1,10 +1,10 @@
-def find_routes(s:str,routes:dict,count = 0):
+def find_routes(s:str,routes:dict):
     try:
         temp = routes[s]
-        count += temp[1]
-        return find_routes(temp[0],routes,count)
+        count = temp[1]
+        return count + find_routes(temp[0],routes)
     except KeyError:
-        return count
+        return 0
     
 routes = {
     "i": ("j", 4.0),
