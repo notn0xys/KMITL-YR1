@@ -1,0 +1,1 @@
+C:\Users\akina\OneDrive\เอกสาร\GitHub\KMITL-YR1\Elementary_System_Pro\Exam_prac\prac22\target\debug\prac22.exe: C:\Users\akina\OneDrive\เอกสาร\GitHub\KMITL-YR1\Elementary_System_Pro\Exam_prac\prac22\src\main.rs
