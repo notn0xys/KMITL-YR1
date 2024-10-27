@@ -3,7 +3,7 @@ def find_routes(s:str,routes:dict):
         temp = routes[s]
         count = temp[1]
         return count + find_routes(temp[0],routes)
-    except KeyError:
+    except:
         return 0
     
 routes = {
