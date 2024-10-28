@@ -1,0 +1,1 @@
+C:\Users\akina\OneDrive\เอกสาร\GitHub\KMITL-YR1\Elementary_System_Pro\exam_prac_final\iter_prac\target\debug\iter_prac.exe: C:\Users\akina\OneDrive\เอกสาร\GitHub\KMITL-YR1\Elementary_System_Pro\exam_prac_final\iter_prac\src\main.rs

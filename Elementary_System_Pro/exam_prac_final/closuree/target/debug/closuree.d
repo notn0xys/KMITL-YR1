@@ -1,0 +1,1 @@
+C:\Users\akina\OneDrive\เอกสาร\GitHub\KMITL-YR1\Elementary_System_Pro\exam_prac_final\closuree\target\debug\closuree.exe: C:\Users\akina\OneDrive\เอกสาร\GitHub\KMITL-YR1\Elementary_System_Pro\exam_prac_final\closuree\src\main.rs

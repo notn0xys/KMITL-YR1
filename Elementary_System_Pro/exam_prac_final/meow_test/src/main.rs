@@ -13,5 +13,6 @@ fn main() {
     };
     me.im_so_cute();
     outer::meow::hi_from_meow();
+    inner::back::ulti::hi_from_out_calledfrom_util();
 }
 
