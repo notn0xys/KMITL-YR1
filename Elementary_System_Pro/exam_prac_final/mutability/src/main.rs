@@ -6,5 +6,9 @@
 fn main() {
     let numbers = vec![1, 2, 3];
     let letters = vec!['a', 'b', 'c'];
-    let pairs: Vec<(i32, char)> = numbers.iter().clone().zip(letters.iter()).collect();
+    let pairs: Vec<(i32, char)> = numbers.iter().map(|&x| x).zip(letters.iter().map(|&x| x) ).collect();
+    println!("{:?}" , pairs);
+    println!("{:?}" , numbers);
+    println!("{:?}" , letters);
+
 }
