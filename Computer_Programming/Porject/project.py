@@ -107,4 +107,4 @@ class SearchPage(ctk.CTkFrame,Search):
         self.controller.show_frame("MainPage")
 if __name__ == "__main__":
     app = App()
-    app.mainloop()
+    app.mainloop() 
