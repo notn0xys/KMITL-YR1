@@ -97,35 +97,40 @@ class Search:
 
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, "html.parser")
-
+        gallery_items = soup.find_all('div', class_='c-gallery__item')
+        max_images = 3
+        urls = []
+        for item in gallery_items:
+            img_tag = item.find('img') 
+            if img_tag and 'src' in img_tag.attrs:
+                urls.append(img_tag['src'])
+            if len(urls) > max_images:
+                break
         specifications_section = soup.find(id="tab-specifications")
         if not specifications_section:
             driver.quit()
             return {"error": "Specifications section not found"}
-
         specifications = {}
         spec_items = specifications_section.find_all("div", class_="o-grid o-grid--lg u-margin-ends-lg") 
-
+        
         for item in spec_items:
             name_div = item.find("div", class_="u-width-1 u-padding-sides-md")
             if name_div and name_div.h3:
                 spec_name = name_div.h3.text.strip()
             else:
                 continue  
-
-            value_div = item.find("div", class_="u-width-1/2 u-width-1@mobile u-padding-sides-md")
-            if value_div:
-                spec_value = value_div.text.strip()
-            else:
-                spec_value = "N/A"  
-
-            specifications[spec_name] = spec_value
+            
+            value_div = item.find_all("div", class_="u-width-1/2 u-width-1@mobile u-padding-sides-md")
+            vallsit = []
+            for values in value_div:
+                if values:
+                    vallsit.append(values.text.strip())
+            specifications[spec_name] = vallsit
 
         driver.quit()
 
-        return {
-            "specifications": specifications,
-        }
+        return (specifications,urls)
+        
     def on_search(self):
         pass
 
@@ -170,19 +175,31 @@ class Search:
                 self.after(0, lambda: loading_popup.destroy())
                 self.after(0, lambda: updatedetails(additional_data))
         def updatedetails(data):
-            print(data)
+            upper = ctk.CTkFrame(self)
+            lower = ctk.CTkScrollableFrame(self)
+            upper.grid(row = 0, sticky = 'nsew')
+            lower.grid(row = 1, sticky = 'nsew')
+            response = requests.get(data[1][0])
+            pil_image = Image.open(BytesIO(response.content))
+            pic1= ctk.CTkImage(pil_image,size=(800, 400))
+            response = requests.get(data[1][1])
+            pil_image = Image.open(BytesIO(response.content))
+            pic2= ctk.CTkImage(pil_image,size=(400, 195))
+            response = requests.get(data[1][2])
+            pil_image = Image.open(BytesIO(response.content))
+            pic3= ctk.CTkImage(pil_image,size=(400, 195))
+            img_lab1 = ctk.CTkLabel(upper,image=pic1,text="",corner_radius = 5)
+            img_lab2 = ctk.CTkLabel(upper,image=pic2,text="",corner_radius = 5)
+            img_lab3 = ctk.CTkLabel(upper,image=pic3,text="",corner_radius = 5)
+            img_lab1.grid(sticky = 'n', row = 0, rowspan = 2, column = 0 , padx = (20,5), pady = (10,0))
+            img_lab2.grid(sticky = 'n', row = 0, column = 1, padx = (0,20), pady = (10,5))
+            img_lab3.grid(sticky =  'n' , row = 1, column = 1, padx = (0,20), pady = (5,0))
         thread = threading.Thread(target=scrape_and_update)
         thread.start()
         home_img = ctk.CTkImage(
             dark_image=Image.open("imgs\\home.png"), light_image=Image.open("imgs\\home.png"), size=(43, 43))
         my_img = ctk.CTkImage(
             dark_image=Image.open("imgs\\wtf.png"), light_image=Image.open("imgs\\wtf.png"), size=(43, 43))
-        response = requests.get(x['image'])
-        pilimage = Image.open(BytesIO(response.content))
-        pilimage = pilimage.resize((800,400))
-        ctk_img = ctk.CTkImage(pilimage,size=(800,400))
-        imagelabel = ctk.CTkLabel(self,image=ctk_img, text=  "")
-        imagelabel.grid(row = 0 , column = 1 , columnspan = 1, pady = (10,0))
         ctk.CTkButton(self, width=50, height=50, command=self.on_search, image=my_img, bg_color="transparent", text="").place(x=1350, y=3)
         ctk.CTkButton(self, width=50, height=50, command=self.on_home, image=home_img, bg_color="transparent", text="").place(x=1420, y=3)
 
@@ -222,7 +239,7 @@ class MainPage(ctk.CTkFrame, Search):
             button_id = i + start_index
             response = requests.get(car['image'])
             pil_image = Image.open(BytesIO(response.content))
-            pil_image = pil_image.resize((450, 250))  # Adjust size as needed
+            pil_image = pil_image.resize((450, 250)) 
             ctk_image = ctk.CTkImage(pil_image,size=(450, 250))
             car_button = ctk.CTkButton(
                 self,
