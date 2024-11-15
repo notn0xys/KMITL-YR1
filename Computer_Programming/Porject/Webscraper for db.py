@@ -1,12 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
 import pickle
 car_data = []
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-for i in range(1,5):
+for i in range(1,10):
     url = f"https://www.one2car.com/en/cars-for-sale?page_number={i}&page_size=26"
     driver.get(url)
     time.sleep(3)
