@@ -365,7 +365,7 @@ class SearchPage(ctk.CTkFrame, Search):
                 image = ctk_img,
                 corner_radius= 10,
                 compound= "top",
-                command= lambda car_id = button_id: self.make_page(self.car_data[car_id])
+                command= lambda car_id = button_id: self.make_page(filtered_data[car_id])
             ).grid(row=1 + i // 2, column=i % 2 + 1, pady=(10, 10), padx=(10, 10), sticky="n")
         if self.page_multiplier > 0:
             backbtn = ctk.CTkButton(self, text="Back", command=self.backwards)
