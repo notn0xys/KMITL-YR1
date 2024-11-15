@@ -223,6 +223,7 @@ class MainPage(ctk.CTkFrame, Search):
         self.page_multiplier = 0
         self.controller = controller
         self.car_data = self.load_car_data()
+        self.filter_text = ""
         self.create_page()
     def create_page(self):
         for widget in self.winfo_children():
@@ -232,10 +233,16 @@ class MainPage(ctk.CTkFrame, Search):
         ctk.set_default_color_theme("green")
         self.e1 = ctk.CTkEntry(self, width=600, height=50)
         self.e1.grid(row=0, column=1, sticky= "nsew")
+        self.e1.insert(0,self.filter_text)
+        self.e1.bind("<Return>", lambda event: self.apply())
         search_button = ctk.CTkButton(self, width=50,height=50,command=self.on_search, image=my_img,bg_color="transparent",text="").place(x = 1100, y = 0)
+        filtered_car = []
+        for car in self.car_data:
+            if self.filter_text.lower() in car['title'].lower():
+                filtered_car.append(car)
         start_index = self.page_multiplier * 6
         end_index = start_index + 6
-        for i, car in enumerate(self.car_data[start_index:end_index]):
+        for i, car in enumerate(filtered_car[start_index:end_index]):
             button_id = i + start_index
             response = requests.get(car['image'])
             pil_image = Image.open(BytesIO(response.content))
@@ -248,13 +255,13 @@ class MainPage(ctk.CTkFrame, Search):
                 text=f"{car['title']} \n {car['price'] if '%' not in car['price'] else self.remove_percent(car['price'])}",
                 image=ctk_image,
                 compound="top",
-                command=lambda car_id=button_id: self.make_page(self.car_data[car_id])
+                command=lambda car_id=button_id: self.make_page(filtered_car[car_id])
             )
             car_button.grid(row=1 + i // 3, column=i % 3, pady=10, padx=(10,10),sticky="nsew",)
         if self.page_multiplier > 0:
             backbtn = ctk.CTkButton(self, text="Back", command=self.backwards)
             backbtn.grid(row=3, column=0, pady=(20, 0), padx=(10, 10), sticky="nsew")
-        if end_index < len(self.car_data):
+        if end_index < len(filtered_car):
             next_button = ctk.CTkButton(self, text="Next", command=self.forward)
             next_button.grid(row=3, column=2, pady=(20, 0), padx=(10, 10), sticky="nsew")
         else:
@@ -262,7 +269,10 @@ class MainPage(ctk.CTkFrame, Search):
 
     def on_home(self):
         self.create_page()
-
+    def apply(self):
+        self.filter_text = self.e1.get().strip().lower()
+        self.page_multiplier = 0
+        self.create_page()
     def on_search(self):
         self.controller.show_frame("SearchPage")
 
@@ -360,7 +370,7 @@ class SearchPage(ctk.CTkFrame, Search):
             
             if (self.minm <= max_mileage <= self.maxm 
                 and self.minp <= price <= self.maxp 
-                and (self.filter_text in car['title'].lower())
+                and (self.filter_text.lower() in car['title'].lower())
                 and (self.selected_brand == "All Brands" or   self.selected_brand.lower() in car['title'].lower())
                 ):
                 filtered_data.append(car)
@@ -393,7 +403,7 @@ class SearchPage(ctk.CTkFrame, Search):
         else:
             self.last_page = True
         apply_btn = ctk.CTkButton(self.frame1,text="Apply",command=self.apply)
-        apply_btn.grid(row = 6,column = 0 , sticky = 'nsew')
+        apply_btn.grid(row = 6,column = 0 , sticky = 'n')
     def on_search(self):
         self.create_page()
     def apply(self):
