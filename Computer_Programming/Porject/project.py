@@ -15,6 +15,8 @@ import tkinter as tk
 from tkinter import messagebox
 from RangeSlider.RangeSlider import RangeSliderH 
 from PIL import Image
+import webbrowser
+import os
 def update_info():
     car_data = []
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -69,24 +71,139 @@ class App(ctk.CTk):
         width = self.winfo_screenwidth()
         self.bind("<F11>", lambda event: self.attributes("-fullscreen", not self.attributes("-fullscreen")))
         height = self.winfo_screenheight()
-        self.geometry(f"{int(width * 0.8)}x{int(height * 0.8)}")
+        self.geometry(f"{int(width * 0.82)}x{int(height * 0.82)}")
         self.minsize(800, 650)  
         self.maxsize(width, height)
         self.frames = {}
+        self.data_manager = DataManager() 
+        self.user_manager = UserManager()
+        self.current_user = None 
         self.title("Auto Shop")
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        for F in (MainPage, SearchPage):
-            frame = F(parent=self, controller=self)
+        for F in (LoginPage,RegisterPage,MainPage,SearchPage):
+            frame = F(parent=self, controller=self, data_manager=self.data_manager)
             self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
-        self.show_frame("MainPage")
+        self.show_frame("RegisterPage")
 
     def show_frame(self, page_name):
         """Raise the selected page to the front"""
         frame = self.frames[page_name]
         frame.tkraise()
+class UserManager:
+    def __init__(self, filename="users.pkl"):
+        self.filename = filename
+        if not os.path.exists(self.filename):
+            with open(self.filename, 'wb') as file:
+                pickle.dump({"users": []}, file)
 
+    def load_users(self):
+        with open(self.filename, 'rb') as file:
+            return pickle.load(file)
+
+    def save_users(self, data):
+        with open(self.filename, 'wb') as file:
+            pickle.dump(data, file)
+
+    def register_user(self, username, password, is_admin=False):
+        users = self.load_users()
+        for user in users['users']:
+                if user['username'] == username:
+                    return False
+        users["users"].append({"username": username, "password": password, "is_admin": is_admin})
+        self.save_users(users)
+        return True
+
+    def authenticate_user(self, username, password):
+        users = self.load_users()
+        for user in users["users"]:
+            if user["username"] == username and user["password"] == password:
+                return user  
+        return None
+class LoginPage(ctk.CTkFrame):
+    def __init__(self, parent,controller,data_manager):
+        super().__init__(parent)
+        self.controller = controller
+        show = ctk.CTkLabel(self,text="Login" ,font=("Arial" , 18 ,"bold"))
+        show.pack(pady = 20)
+        self.username_entry = ctk.CTkEntry(self, placeholder_text="Username" , width= 250 , height= 40)
+        self.username_entry.pack(pady=(10,10))
+        self.password_entry = ctk.CTkEntry(self, placeholder_text="Password", show="*" , width= 250 , height= 40)
+        self.password_entry.pack(pady=10)
+
+        login_button = ctk.CTkButton(self, text="Login", command=self.login)
+        login_button.pack(pady=10)
+
+        register_button = ctk.CTkButton(self, text="Make an account", command=lambda: parent.show_frame("RegisterPage"))
+        register_button.pack(pady=10)
+        self.err_msg = ctk.CTkLabel(self,text='', font=("Arial" , 14 , "bold"),text_color= 'red')
+        self.err_msg.pack(pady = 10)
+
+    def login(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        if len(username) == 0 or len(password) == 0:
+            self.err_msg.configure(text = "Invalid username or password")
+            return
+        user = self.controller.user_manager.authenticate_user(username, password)
+        if user:
+            self.controller.current_user = user
+            self.err_msg.configure(text = '')
+            self.controller.show_frame("MainPage")
+        else:
+            self.err_msg.configure(text = "Wrong username or password")
+class RegisterPage(ctk.CTkFrame):
+    def __init__(self, parent,controller,data_manager):
+        super().__init__(parent)
+        self.controller = controller
+        show = ctk.CTkLabel(self,text="Register" ,font=("Arial" , 18 ,"bold"))
+        show.pack(pady = 20)
+        self.username_entry = ctk.CTkEntry(self, placeholder_text="Username", width= 250 , height= 40)
+        self.username_entry.pack(pady=10)
+        self.password_entry = ctk.CTkEntry(self, placeholder_text="Password", show="*", width= 250 , height= 40)
+        self.password_entry.pack(pady=10)
+        self.admin_toggle = ctk.BooleanVar()
+        admin_checkbox = ctk.CTkCheckBox(self, text="Register as Admin", variable=self.admin_toggle)
+        admin_checkbox.pack(pady=10)
+
+        register_button = ctk.CTkButton(self, text="Register", command=self.register)
+        register_button.pack(pady=10)
+
+        login_button = ctk.CTkButton(self, text="Sign in", command=lambda: parent.show_frame("LoginPage"))
+        login_button.pack(pady=10)
+        self.err_msg = ctk.CTkLabel(self,text='', font=("Arial" , 14 , "bold"),text_color= 'red')
+        self.err_msg.pack(pady = 10)
+
+    def register(self):
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        if len(username) == 0 or len(password) == 0:
+            self.err_msg.configure(text = "Invalid username or password")
+            return
+        is_admin = self.admin_toggle.get()
+        if self.controller.user_manager.register_user(username, password, is_admin):
+            self.err_msg.configure(text = "")
+            user = {'username': username,'password': password, 'is_admin':is_admin}
+            self.controller.current_user = user
+            self.controller.show_frame("MainPage")
+        else:
+            self.err_msg.configure(text = "Username already exist")
+class DataManager:
+    def __init__(self):
+        self.clicked_cars = dict()
+
+    def add_car(self, car:dict):
+        if car['title'] not in self.clicked_cars:
+            car['title'] = 1
+        else:
+            car['title'] += 1
+    def get_cars(self):
+        return self.clicked_cars
+            
+
+    def get_clicked_cars(self):
+        return self.clicked_cars
 class Search:
     def scrape_car_details(self,link):
         options = Options()
@@ -121,16 +238,15 @@ class Search:
                 continue  
             
             value_div = item.find_all("div", class_="u-width-1/2 u-width-1@mobile u-padding-sides-md")
-            vallsit = []
+            vallist = []
             for values in value_div:
                 if values:
-                    vallsit.append(values.text.strip())
-            specifications[spec_name] = vallsit
+                    vallist.append(values.text.strip())
+            specifications[spec_name] = vallist
 
         driver.quit()
 
         return (specifications,urls)
-        
     def on_search(self):
         pass
 
@@ -149,6 +265,59 @@ class Search:
             return []
 
     def make_page(self, x: dict = {}):
+        self.data_manager.add_car(x)
+        self.amount = 12
+        def hyperlink(link):
+            webbrowser.open(link, autoraise = True)
+        def select_period(choice):
+            self.amount = int(choice)
+        def open_toplevel():
+            top = ctk.CTkToplevel(self)
+            top.geometry("450x350")
+            top.title("Interest Rate Calculator")
+            top.grab_set()  
+            title_label = ctk.CTkLabel(top, text="Interest Rate Calculator", font=("Arial", 16, "bold"))
+            title_label.pack(pady=10)
+
+            loan_amount_label = ctk.CTkLabel(top, text="Loan Amount:")
+            loan_amount_label.pack(pady=(10, 0))
+            filtered_price = self.remove_percent(x["price"])
+            filtered_price = filtered_price.replace(",","")
+            filtered_price = filtered_price.replace('Baht', "").strip()
+            loan_amount_var = ctk.StringVar(value=filtered_price) 
+            loan_amount_entry = ctk.CTkEntry(top, textvariable=loan_amount_var)
+            loan_amount_entry.pack(pady=5)
+
+            interest_rate_label = ctk.CTkLabel(top, text="Annual Interest Rate (%):")
+            interest_rate_label.pack(pady=(10, 0))
+            interest_rate_var = ctk.StringVar(value="5")
+            interest_rate_entry = ctk.CTkEntry(top, textvariable=interest_rate_var)
+            interest_rate_entry.pack(pady=5)
+
+            loan_term_label = ctk.CTkLabel(top, text="Loan Term (Months):")
+            loanterm = ctk.CTkOptionMenu(top,  values=["12","24","36","48","60","72","84"], command=select_period)
+            loanterm.set("12")
+            loan_term_label.pack(pady=(10, 0))
+            loanterm.pack()
+
+            result_label = ctk.CTkLabel(top, text="", font=("Arial", 12))
+            result_label.pack(pady=(10, 0))
+            def calc_amount():
+                try:
+                    loan_amount = float(loan_amount_var.get())
+                    annual_rate = float(interest_rate_var.get())
+                    loan_term = self.amount
+                    monthly_rate = (annual_rate / 100) / 12
+                    num_payments = loan_term * 12
+                    if monthly_rate > 0:
+                        monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -num_payments)
+                    else:
+                        monthly_payment = loan_amount / num_payments
+                    result_label.configure(text=f"Monthly Payment: ฿{monthly_payment:.2f}")
+                except ValueError:
+                    result_label.configure(text="Invalid input. Please enter numeric values.")
+            calc_btn = ctk.CTkButton(top,text="Calculate", command=calc_amount)
+            calc_btn.pack()
         for widget in self.winfo_children():
             widget.destroy()
 
@@ -176,9 +345,15 @@ class Search:
                 self.after(0, lambda: updatedetails(additional_data))
         def updatedetails(data):
             upper = ctk.CTkFrame(self)
-            lower = ctk.CTkScrollableFrame(self)
-            upper.grid(row = 0, sticky = 'nsew')
-            lower.grid(row = 1, sticky = 'nsew')
+            lower = ctk.CTkScrollableFrame(self,height=400)
+            rightmost = ctk.CTkFrame(self,width = 500)
+            upper.grid(row = 0,column = 0, columnspan = 4, sticky = 'nsew')
+            lower.grid(row = 1,column = 0, columnspan = 4, sticky = 'nsew')
+            rightmost.grid(row = 0, rowspan = 2,sticky = 'nsew',column = 4,columnspan = 2)
+            home_img = ctk.CTkImage(dark_image=Image.open("imgs\\home.png"), light_image=Image.open("imgs\\home.png"), size=(43, 43))
+            my_img = ctk.CTkImage(dark_image=Image.open("imgs\\wtf.png"), light_image=Image.open("imgs\\wtf.png"), size=(43, 43))
+            ctk.CTkButton(rightmost, width=50, height=50, command=self.on_search, image=my_img, bg_color="transparent", text="").grid(sticky = 'n', row = 0,column = 0,pady = (20,0))
+            ctk.CTkButton(rightmost, width=50, height=50, command=self.on_home, image=home_img, bg_color="transparent", text="").grid(sticky = 'n', row = 0,column = 1,pady = (20,0))
             response = requests.get(data[1][0])
             pil_image = Image.open(BytesIO(response.content))
             pic1= ctk.CTkImage(pil_image,size=(800, 400))
@@ -194,14 +369,32 @@ class Search:
             img_lab1.grid(sticky = 'n', row = 0, rowspan = 2, column = 0 , padx = (20,5), pady = (10,0))
             img_lab2.grid(sticky = 'n', row = 0, column = 1, padx = (0,20), pady = (10,5))
             img_lab3.grid(sticky =  'n' , row = 1, column = 1, padx = (0,20), pady = (5,0))
+            column_count = 5
+            for section, items in data[0].items():
+                for index, item in enumerate(items):
+                    items[index] = item.replace("\n", "\t")
+            for i , (keys,values) in enumerate(data[0].items()):
+                section_frame = ctk.CTkFrame(lower, corner_radius=5)
+                section_frame.grid(row=i // column_count, column=i % column_count, padx=10, pady=10, sticky="nw")
+                section_title = ctk.CTkLabel(section_frame, text=keys, font=("Arial", 14, "bold"))
+                section_title.pack(pady=5, anchor="w")
+                for item in values:
+                    data_label = ctk.CTkLabel(section_frame, text=item, font=("Arial", 12),anchor="w")
+                    data_label.pack(anchor="w", padx=5)
+            title = ctk.CTkLabel(rightmost, text=f"{x['title']}",font=("Arial", 12))
+            price = ctk.CTkLabel(rightmost, text=f"Price: {x['price']}",font=("Arial", 12))
+            year = ctk.CTkLabel(rightmost, text=f"Year: {x['year']}",font=("Arial", 12))
+            milage = ctk.CTkLabel(rightmost, text=f"Mileage: {x['mileage']}",font=("Arial", 12))
+            location = ctk.CTkLabel(rightmost, text=f"Location: {x['location']}",font=("Arial", 12))
+            buy_btn = ctk.CTkButton(rightmost,text='Buy Here',command=lambda: hyperlink(x['link']))
+            intrest_clac = ctk.CTkButton(rightmost, text="Intrest rate calculator" , command=open_toplevel)
+            rows = 1
+            for i in [title,price,year,milage,location,buy_btn,intrest_clac]:
+                i.grid(sticky = 'n' , row = rows , column = 0 , columnspan = 2,pady = 5)
+                rows += 1
+            
         thread = threading.Thread(target=scrape_and_update)
         thread.start()
-        home_img = ctk.CTkImage(
-            dark_image=Image.open("imgs\\home.png"), light_image=Image.open("imgs\\home.png"), size=(43, 43))
-        my_img = ctk.CTkImage(
-            dark_image=Image.open("imgs\\wtf.png"), light_image=Image.open("imgs\\wtf.png"), size=(43, 43))
-        ctk.CTkButton(self, width=50, height=50, command=self.on_search, image=my_img, bg_color="transparent", text="").place(x=1350, y=3)
-        ctk.CTkButton(self, width=50, height=50, command=self.on_home, image=home_img, bg_color="transparent", text="").place(x=1420, y=3)
 
     def backwards(self):
         self.page_multiplier -= 1
@@ -217,10 +410,11 @@ class Search:
             else:
                 return x
 class MainPage(ctk.CTkFrame, Search):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller,data_manager):
         super().__init__(parent)
         self.last_page = False
         self.page_multiplier = 0
+        self.data_manager = data_manager
         self.controller = controller
         self.car_data = self.load_car_data()
         self.filter_text = ""
@@ -278,12 +472,13 @@ class MainPage(ctk.CTkFrame, Search):
 
 
 class SearchPage(ctk.CTkFrame, Search):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller,data_manager):
         super().__init__(parent)
         self.page_multiplier = 0
         self.controller = controller
         self.car_data = self.load_car_data()
         self.minp = 0
+        self.data_manager = data_manager
         self.maxp = 4000000
         self.maxm = 200000
         self.minm = 0
@@ -306,6 +501,18 @@ class SearchPage(ctk.CTkFrame, Search):
         new_val = self.barprice.getValues()
         self.maxp = new_val[1]
         self.minp = new_val[0]
+    def open_admin_panel(self):
+        panel = ctk.CTkToplevel(self)
+        panel.geometry('700x400')
+        panel.title("Admin Panel")
+        session_data = ctk.CTkLabel(panel,text="Session Data")
+        session_data.grid(row = 0, column = 0 , padx = 10 , pady = 5)
+        all_time_data = ctk.CTkLabel(panel , text="All time Data")
+        all_time_data.grid(row = 0 , column = 1, padx = 10 , pady = 5)
+        RefreshDb = ctk.CTkLabel(panel, text="Refresh Database")
+        RefreshDb.grid(row = 0, column = 2, padx = 10 , pady = 5)
+
+
     def create_page(self):
         for widget in self.winfo_children():
             widget.destroy()
@@ -404,6 +611,9 @@ class SearchPage(ctk.CTkFrame, Search):
             self.last_page = True
         apply_btn = ctk.CTkButton(self.frame1,text="Apply",command=self.apply)
         apply_btn.grid(row = 6,column = 0 , sticky = 'n')
+        if self.controller.current_user and self.controller.current_user["is_admin"]:
+            manager_btn = ctk.CTkButton(self.frame1, text="Admin Panel", command=self.open_admin_panel)
+            manager_btn.grid(row=8, column=0, sticky="n", pady = 10)
     def on_search(self):
         self.create_page()
     def apply(self):
@@ -414,6 +624,6 @@ class SearchPage(ctk.CTkFrame, Search):
         self.controller.show_frame("MainPage")
     def update_brand(self,selected_brand):
         self.selected_brand = selected_brand
-if __name__ == "__main__":
+if __name__ == "__main__":   
     app = App()
     app.mainloop() 
