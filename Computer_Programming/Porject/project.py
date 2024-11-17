@@ -17,46 +17,8 @@ from RangeSlider.RangeSlider import RangeSliderH
 from PIL import Image
 import webbrowser
 import os
-def update_info():
-    car_data = []
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    for i in range(1,5):
-        url = f"https://www.one2car.com/en/cars-for-sale?page_number={i}&page_size=26"
-        driver.get(url)
-        time.sleep(3)
-        soup = BeautifulSoup(driver.page_source, 'html.parser')
-        articles = soup.find_all('article')
-
-        for article in articles:
-            title = article.find('h2').get_text(strip=True) if article.find('h2') else 'N/A'
-            price_element = article.find('div', class_='listing__price')
-            price = price_element.get_text(strip=True) if price_element else 'N/A'
-            year = article.get('data-year', 'N/A')
-            mileage_div = article.find('div', class_='item push-quarter--ends soft--right push-quarter--right')
-            mileage = mileage_div.get_text(strip=True) if mileage_div else 'N/A'
-            listing_specs = article.find('div', class_='listing__specs')
-            divs = listing_specs.find_all('div', class_='item')        
-            gearbox_type = divs[1].get_text(strip=True) if divs[1] else 'N/A'
-            location = divs[2].get_text(strip=True) if divs[2] else 'N/A'
-            link = article.find('a', href=True)['href'] if article.find('a', href=True) else 'N/A'
-            image_tag = article.find('img' , class_= "listing__img")
-            image_url = image_tag['data-src'] if image_tag else 'N/A'
-            car_data.append({
-                'title': title,
-                'price': price,
-                'year': year,
-                'mileage': mileage,
-                'gearbox type': gearbox_type,
-                'location': location,
-                'link': link,
-                'image': image_url
-            })
-    with open('car_data.pkl', 'wb') as file:
-        pickle.dump(car_data, file)
-    print("Database Updated")
-    with open('car_data.pkl', 'rb') as file:
-        loaded_data = pickle.load(file)
-    print(loaded_data)
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 def get_data(x:str) -> list:
     car_data = []
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -64,7 +26,63 @@ def get_data(x:str) -> list:
     driver.get(url)
     time.sleep(3)
 
+def update_info():
+    def create_loading_popup():
+        popup = ctk.CTkToplevel()
+        popup.geometry("300x100")
+        popup.title("Loading")
+        popup.grab_set()
+        progress_label = ctk.CTkLabel(popup, text="Updating database...")
+        progress_label.pack(pady=10)
+        progress_bar = ctk.CTkProgressBar(popup, mode="indeterminate")
+        progress_bar.pack(pady=10, padx=20, fill="x")
+        progress_bar.start()
+        return popup
+    def update_db():
+        try:
+            car_data = []
+            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+            for i in range(1,5):
+                url = f"https://www.one2car.com/en/cars-for-sale?page_number={i}&page_size=26"
+                driver.get(url)
+                time.sleep(3)
+                soup = BeautifulSoup(driver.page_source, 'html.parser')
+                articles = soup.find_all('article')
 
+                for article in articles:
+                    title = article.find('h2').get_text(strip=True) if article.find('h2') else 'N/A'
+                    price_element = article.find('div', class_='listing__price')
+                    price = price_element.get_text(strip=True) if price_element else 'N/A'
+                    year = article.get('data-year', 'N/A')
+                    mileage_div = article.find('div', class_='item push-quarter--ends soft--right push-quarter--right')
+                    mileage = mileage_div.get_text(strip=True) if mileage_div else 'N/A'
+                    listing_specs = article.find('div', class_='listing__specs')
+                    divs = listing_specs.find_all('div', class_='item')        
+                    gearbox_type = divs[1].get_text(strip=True) if divs[1] else 'N/A'
+                    location = divs[2].get_text(strip=True) if divs[2] else 'N/A'
+                    link = article.find('a', href=True)['href'] if article.find('a', href=True) else 'N/A'
+                    image_tag = article.find('img' , class_= "listing__img")
+                    image_url = image_tag['data-src'] if image_tag else 'N/A'
+                    car_data.append({
+                        'title': title,
+                        'price': price,
+                        'year': year,
+                        'mileage': mileage,
+                        'gearbox type': gearbox_type,
+                        'location': location,
+                        'link': link,
+                        'image': image_url
+                    })
+            with open('car_data.pkl', 'wb') as file:
+                pickle.dump(car_data, file)
+            print("Database Updated")
+        except:
+            print("Error Updating db")
+        finally:
+            popup.destroy()
+    popup = create_loading_popup()
+    thread = threading.Thread(target=update_db)
+    thread.start()
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -81,16 +99,98 @@ class App(ctk.CTk):
         self.title("Auto Shop")
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
-        for F in (LoginPage,RegisterPage,MainPage,SearchPage):
+        for F in (LoginPage,RegisterPage,MainPage,SearchPage,AdminPage):
             frame = F(parent=self, controller=self, data_manager=self.data_manager)
             self.frames[F.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
         self.show_frame("RegisterPage")
-
     def show_frame(self, page_name):
-        """Raise the selected page to the front"""
         frame = self.frames[page_name]
         frame.tkraise()
+class AdminPage(ctk.CTkFrame):
+    def __init__(self,parent,controller,data_manager):
+        super().__init__(parent)
+        self.controller = controller
+        self.data_manager = data_manager
+        frame_for_btns = ctk.CTkFrame(self)
+        frame_for_btns.grid(row = 1, column = 5, sticky = 'nsew')
+        session_data = ctk.CTkLabel(self,text="Session Data")
+        session_data.grid(row = 0, column = 0 , padx = 10 , pady = 5)
+        all_time_data = ctk.CTkLabel(self , text="All time Data")
+        all_time_data.grid(row = 0 , column = 1, padx = 10 , pady = 5)
+        RefreshDb = ctk.CTkLabel(self, text="Refresh Database")
+        RefreshDb.grid(row = 0, column = 5, padx = 10 , pady = 5) 
+        refresh_button = ctk.CTkButton(frame_for_btns, text="Refresh Graphs", command=self.refresh_graphs)
+        refresh_button.pack(pady = 10)
+        self.graph_frame = ctk.CTkFrame(self)
+        self.graph_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.total_graph_frame = ctk.CTkFrame(self)
+        self.total_graph_frame.grid(row = 1, column = 1 ,pady=10, padx = 10, sticky = "nsew")
+        self.plot_session_graph()
+        self.plot_total_graph()
+        refresh_db_btn = ctk.CTkButton(frame_for_btns,text='Refresh DB', command=self.refreshdb)
+        refresh_db_btn.pack(pady = 10)
+        return_btn = ctk.CTkButton(frame_for_btns,text="Return",command=self.swap_back)
+        return_btn.pack(pady = 10)
+        self.grid_rowconfigure(1, weight=2)  
+        self.grid_rowconfigure(2, weight=3)  
+        self.grid_columnconfigure(0, weight=2)  
+        self.grid_columnconfigure(1, weight=2)  
+        self.grid_columnconfigure(5, weight=1)
+    def refreshdb(self):
+        update_info()
+        new_car_data = self.load_car_data()
+        self.controller.frames["SearchPage"].car_data = new_car_data
+        self.controller.frames["MainPage"].car_data = new_car_data
+        self.controller.frames["MainPage"].car_data.create_page()
+        self.controller.frames["SearchPage"].create_page()
+    def refresh_graphs(self):
+        self.plot_session_graph()
+        self.plot_total_graph()
+    def plot_session_graph(self):
+        self.plot_graph(
+            self.data_manager.get_clicked_cars(),
+            "Session Clicks",
+            self.graph_frame
+        )
+    def plot_total_graph(self):
+        self.plot_graph(
+            self.data_manager.get_all_time_clicks(),
+            "All-Time Clicks",
+            self.total_graph_frame
+        )
+    def plot_graph(self, data, title, frame):
+        for widget in frame.winfo_children():
+            widget.destroy()
+
+        car_names = list(data.keys())
+        click_counts = list(data.values())
+
+        fig, ax = plt.subplots(figsize=(5, 4))
+        ax.bar(car_names, click_counts, color="skyblue") 
+        ax.set_xlabel("Number of Clicks")
+        ax.set_ylabel("Car Models")
+        ax.set_title(title)
+        ax.tick_params(axis='x', labelsize=8)  
+        ax.tick_params(axis='y', labelsize=10)
+
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(fill="both", expand=True)
+        canvas.draw()
+        plt.close(fig)
+    def swap_back(self):
+        self.controller.show_frame("SearchPage")
+    def load_car_data(self):
+        try:
+            with open('car_data.pkl', 'rb') as file:
+                return pickle.load(file)
+        except FileNotFoundError:
+            print("Pickle file not found, Please click on update database.")
+            return []
+        except Exception as e:
+            print(f"Error loading data: {e}")
+            return []
 class UserManager:
     def __init__(self, filename="users.pkl"):
         self.filename = filename
@@ -190,18 +290,30 @@ class RegisterPage(ctk.CTkFrame):
         else:
             self.err_msg.configure(text = "Username already exist")
 class DataManager:
-    def __init__(self):
+    def __init__(self,all_time_file="all_time_clicks.pkl"):
         self.clicked_cars = dict()
+        self.all_time_file = all_time_file
+        self.all_time_clicks = self.load_all_time_clicks()
 
     def add_car(self, car:dict):
-        if car['title'] not in self.clicked_cars:
-            car['title'] = 1
+        if car['title'][5:10] not in self.clicked_cars:
+            self.clicked_cars[car['title'][5:17]] = 1
         else:
-            car['title'] += 1
+            self.clicked_cars[car['title'][5:17]] += 1
+        self.update_all_time_clicks(car["title"][5:17])
     def get_cars(self):
         return self.clicked_cars
-            
-
+    def load_all_time_clicks(self):
+        if os.path.exists(self.all_time_file):
+            with open(self.all_time_file, "rb") as file:
+                return pickle.load(file)
+        return {}
+    def update_all_time_clicks(self, car_title):
+        self.all_time_clicks[car_title] = self.all_time_clicks.get(car_title, 0) + 1
+        with open(self.all_time_file, "wb") as file:
+            pickle.dump(self.all_time_clicks, file)
+    def get_all_time_clicks(self):
+        return self.all_time_clicks
     def get_clicked_cars(self):
         return self.clicked_cars
 class Search:
@@ -308,7 +420,7 @@ class Search:
                     annual_rate = float(interest_rate_var.get())
                     loan_term = self.amount
                     monthly_rate = (annual_rate / 100) / 12
-                    num_payments = loan_term * 12
+                    num_payments = loan_term 
                     if monthly_rate > 0:
                         monthly_payment = (loan_amount * monthly_rate) / (1 - (1 + monthly_rate) ** -num_payments)
                     else:
@@ -419,9 +531,29 @@ class MainPage(ctk.CTkFrame, Search):
         self.car_data = self.load_car_data()
         self.filter_text = ""
         self.create_page()
+    def regen(self):
+        if self.controller.current_user != None:
+            self.controller.current_user = None
+        self.car_data = self.load_car_data()
+        self.on_home()
+        self.controller.frames["SearchPage"].car_data = self.car_data 
+        self.controller.frames["SearchPage"].create_page()
+
+
     def create_page(self):
         for widget in self.winfo_children():
             widget.destroy()
+        if len(self.car_data) == 0:
+            self.temp = ctk.CTkToplevel(self)
+            self.temp.geometry('450x300')
+            get_data = ctk.CTkButton(self.temp,command=update_info,text="Get database")
+            get_data.pack(pady = 10)
+            def close_and_refresh():
+                self.temp.destroy()
+                self.regen()
+                self.controller.show_frame("RegisterPage")
+            refresh_frame = ctk.CTkButton(self.temp,command=close_and_refresh,text="Refresh app")
+            refresh_frame.pack(pady = 10)
         my_img = ctk.CTkImage(dark_image=PIL.Image.open("imgs\\wtf.png"), light_image=Image.open("imgs\\wtf.png"),size=(43,43))
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("green")
@@ -431,9 +563,13 @@ class MainPage(ctk.CTkFrame, Search):
         self.e1.bind("<Return>", lambda event: self.apply())
         search_button = ctk.CTkButton(self, width=50,height=50,command=self.on_search, image=my_img,bg_color="transparent",text="").place(x = 1100, y = 0)
         filtered_car = []
+        
         for car in self.car_data:
-            if self.filter_text.lower() in car['title'].lower():
-                filtered_car.append(car)
+            try:
+                if self.filter_text.lower() in car['title'].lower():
+                    filtered_car.append(car)
+            except:
+                print(car)
         start_index = self.page_multiplier * 6
         end_index = start_index + 6
         for i, car in enumerate(filtered_car[start_index:end_index]):
@@ -501,18 +637,6 @@ class SearchPage(ctk.CTkFrame, Search):
         new_val = self.barprice.getValues()
         self.maxp = new_val[1]
         self.minp = new_val[0]
-    def open_admin_panel(self):
-        panel = ctk.CTkToplevel(self)
-        panel.geometry('700x400')
-        panel.title("Admin Panel")
-        session_data = ctk.CTkLabel(panel,text="Session Data")
-        session_data.grid(row = 0, column = 0 , padx = 10 , pady = 5)
-        all_time_data = ctk.CTkLabel(panel , text="All time Data")
-        all_time_data.grid(row = 0 , column = 1, padx = 10 , pady = 5)
-        RefreshDb = ctk.CTkLabel(panel, text="Refresh Database")
-        RefreshDb.grid(row = 0, column = 2, padx = 10 , pady = 5)
-
-
     def create_page(self):
         for widget in self.winfo_children():
             widget.destroy()
@@ -547,10 +671,9 @@ class SearchPage(ctk.CTkFrame, Search):
         Home.place(x=1050, y=10)
         brand_label = ctk.CTkLabel(self.frame1, text="Car Brand", text_color="white")
         brand_label.grid(row=4, column=0, padx=10, pady=(10, 0))
-
         self.brand_menu = ctk.CTkOptionMenu(self.frame1, values=self.brands, command=self.update_brand)
         self.brand_menu.set(self.selected_brand) 
-        self.brand_menu.grid(row=5, column=0, padx=10, pady=(0, 20))
+        self.brand_menu.grid(row=5, column=0, padx=10, pady=(0, 20)) 
         filtered_data = []
         for car in self.car_data:
             try:
@@ -575,12 +698,15 @@ class SearchPage(ctk.CTkFrame, Search):
                 print(f"Error parsing car data: {e}")
                 continue
             
-            if (self.minm <= max_mileage <= self.maxm 
-                and self.minp <= price <= self.maxp 
-                and (self.filter_text.lower() in car['title'].lower())
-                and (self.selected_brand == "All Brands" or   self.selected_brand.lower() in car['title'].lower())
-                ):
-                filtered_data.append(car)
+            try:
+                if (self.minm <= max_mileage <= self.maxm 
+                    and self.minp <= price <= self.maxp 
+                    and (self.filter_text.lower() in car['title'].lower())
+                    and (self.selected_brand == "All Brands" or   self.selected_brand.lower() in car['title'].lower())
+                    ):
+                    filtered_data.append(car)
+            except:
+                print(car)
 
         start_index = self.page_multiplier * 4
         end_index = start_index + 4
@@ -611,9 +737,15 @@ class SearchPage(ctk.CTkFrame, Search):
             self.last_page = True
         apply_btn = ctk.CTkButton(self.frame1,text="Apply",command=self.apply)
         apply_btn.grid(row = 6,column = 0 , sticky = 'n')
+        log_out_btn = ctk.CTkButton(self.frame1,text='Log Out', command= self.log_out)
+        log_out_btn.grid(row = 8 , column = 0 , pady = 10 , sticky = 'n')
         if self.controller.current_user and self.controller.current_user["is_admin"]:
-            manager_btn = ctk.CTkButton(self.frame1, text="Admin Panel", command=self.open_admin_panel)
-            manager_btn.grid(row=8, column=0, sticky="n", pady = 10)
+            manager_btn = ctk.CTkButton(self.frame1, text="Admin Panel", command=self.admin_swap)
+            manager_btn.grid(row=10, column=0, sticky="n", pady = 10)
+    def log_out(self):
+        self.controller.current_user = None
+        self.controller.data_manager = DataManager()
+        self.controller.show_frame("RegisterPage")
     def on_search(self):
         self.create_page()
     def apply(self):
@@ -624,6 +756,8 @@ class SearchPage(ctk.CTkFrame, Search):
         self.controller.show_frame("MainPage")
     def update_brand(self,selected_brand):
         self.selected_brand = selected_brand
+    def admin_swap(self):
+        self.controller.show_frame("AdminPage")
 if __name__ == "__main__":   
     app = App()
     app.mainloop() 
