@@ -137,7 +137,7 @@ class AdminPage(ctk.CTkFrame):
         new_car_data = self.load_car_data()
         self.controller.frames["SearchPage"].car_data = new_car_data
         self.controller.frames["MainPage"].car_data = new_car_data
-        self.controller.frames["MainPage"].car_data.create_page()
+        self.controller.frames["MainPage"].create_page()
         self.controller.frames["SearchPage"].create_page()
     def refresh_graphs(self):
         self.plot_session_graph()
