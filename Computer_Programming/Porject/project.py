@@ -19,7 +19,9 @@ import webbrowser
 import os
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from threading import Event
 def update_info():
+    update_complete = Event()
     def create_loading_popup():
         popup = ctk.CTkToplevel()
         popup.geometry("300x100")
@@ -72,12 +74,12 @@ def update_info():
         except:
             print("Error Updating db")
         finally:
-            if driver:
-                driver.quit()
+            update_complete.set()
             popup.destroy()
     popup = create_loading_popup()
     thread = threading.Thread(target=update_db)
     thread.start()
+    return update_complete
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -132,13 +134,21 @@ class AdminPage(ctk.CTkFrame):
         self.grid_columnconfigure(0, weight=2)  
         self.grid_columnconfigure(1, weight=2)  
         self.grid_columnconfigure(5, weight=1)
+    
     def refreshdb(self):
-        update_info()
-        new_car_data = self.load_car_data()
-        self.controller.frames["SearchPage"].car_data = new_car_data
-        self.controller.frames["MainPage"].car_data = new_car_data
-        self.controller.frames["MainPage"].create_page()
-        self.controller.frames["SearchPage"].create_page()
+        update_complete = update_info()
+        self.after(100, self.wait_for_update, update_complete)
+
+    def wait_for_update(self, update_complete):
+        if update_complete.is_set():
+            new_car_data = self.load_car_data()
+            self.controller.frames["SearchPage"].car_data = new_car_data
+            self.controller.frames["MainPage"].car_data = new_car_data
+            self.controller.frames["MainPage"].create_page()
+            self.controller.frames["SearchPage"].create_page()
+            print("Update sucess")
+        else:
+            self.after(100, self.wait_for_update, update_complete)  
     def refresh_graphs(self):
         self.plot_session_graph()
         self.plot_total_graph()
