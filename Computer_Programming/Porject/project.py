@@ -19,13 +19,6 @@ import webbrowser
 import os
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-def get_data(x:str) -> list:
-    car_data = []
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-    url = x
-    driver.get(url)
-    time.sleep(3)
-
 def update_info():
     def create_loading_popup():
         popup = ctk.CTkToplevel()
@@ -79,6 +72,8 @@ def update_info():
         except:
             print("Error Updating db")
         finally:
+            if driver:
+                driver.quit()
             popup.destroy()
     popup = create_loading_popup()
     thread = threading.Thread(target=update_db)
@@ -206,12 +201,12 @@ class UserManager:
         with open(self.filename, 'wb') as file:
             pickle.dump(data, file)
 
-    def register_user(self, username, password, is_admin=False):
+    def register_user(self, username, password, is_admin=False,favs = []):
         users = self.load_users()
         for user in users['users']:
                 if user['username'] == username:
                     return False
-        users["users"].append({"username": username, "password": password, "is_admin": is_admin})
+        users["users"].append({"username": username, "password": password, "is_admin": is_admin,"favorites": favs})
         self.save_users(users)
         return True
 
@@ -221,6 +216,32 @@ class UserManager:
             if user["username"] == username and user["password"] == password:
                 return user  
         return None
+    def add_to_favorites(self, username, car):
+        users = self.load_users()
+        for user in users['users']:
+            if user['username'] == username:
+                if car not in user['favorites']:
+                    user['favorites'].append(car)
+                    self.save_users(users)
+                    return True
+        return False
+
+    def remove_from_favorites(self, username, car):
+        users = self.load_users()
+        for user in users['users']:
+            if user['username'] == username:
+                if car in user['favorites']:
+                    user['favorites'].remove(car)
+                    self.save_users(users)
+                    return True
+        return False
+
+    def get_favorites(self, username):
+        users = self.load_users()
+        for user in users['users']:
+            if user['username'] == username:
+                return user['favorites']
+        return []
 class LoginPage(ctk.CTkFrame):
     def __init__(self, parent,controller,data_manager):
         super().__init__(parent)
@@ -243,6 +264,8 @@ class LoginPage(ctk.CTkFrame):
     def login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
+        self.username_entry.delete(0,ctk.END)
+        self.password_entry.delete(0,ctk.END)
         if len(username) == 0 or len(password) == 0:
             self.err_msg.configure(text = "Invalid username or password")
             return
@@ -250,6 +273,7 @@ class LoginPage(ctk.CTkFrame):
         if user:
             self.controller.current_user = user
             self.err_msg.configure(text = '')
+            self.controller.frames['SearchPage'].create_page()
             self.controller.show_frame("MainPage")
         else:
             self.err_msg.configure(text = "Wrong username or password")
@@ -278,6 +302,8 @@ class RegisterPage(ctk.CTkFrame):
     def register(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
+        self.username_entry.delete(0,ctk.END)
+        self.password_entry.delete(0,ctk.END)
         if len(username) == 0 or len(password) == 0:
             self.err_msg.configure(text = "Invalid username or password")
             return
@@ -286,6 +312,7 @@ class RegisterPage(ctk.CTkFrame):
             self.err_msg.configure(text = "")
             user = {'username': username,'password': password, 'is_admin':is_admin}
             self.controller.current_user = user
+            self.controller.frames['SearchPage'].create_page()
             self.controller.show_frame("MainPage")
         else:
             self.err_msg.configure(text = "Username already exist")
@@ -375,7 +402,10 @@ class Search:
         except Exception as e:
             print(f"Error loading data: {e}")
             return []
-
+    def get_user_favorites(self):
+        if self.controller.current_user:
+            return self.controller.user_manager.get_favorites(self.controller.current_user["username"])
+        return []
     def make_page(self, x: dict = {}):
         self.data_manager.add_car(x)
         self.amount = 12
@@ -500,11 +530,21 @@ class Search:
             location = ctk.CTkLabel(rightmost, text=f"Location: {x['location']}",font=("Arial", 12))
             buy_btn = ctk.CTkButton(rightmost,text='Buy Here',command=lambda: hyperlink(x['link']))
             intrest_clac = ctk.CTkButton(rightmost, text="Intrest rate calculator" , command=open_toplevel)
+            is_favorite = x in self.get_user_favorites()
+            def toggle_favorite():
+                username = self.controller.current_user["username"]
+                if x in self.get_user_favorites():
+                    self.controller.user_manager.remove_from_favorites(username, x)
+                    favorite_button.configure(text="🤍 Add to Favorites")
+                else:
+                    self.controller.user_manager.add_to_favorites(username, x)
+                    favorite_button.configure(text="❤️ Remove from Favorites")
+            favorite_button = ctk.CTkButton(rightmost,text="❤️ Remove from Favorites" if is_favorite else "🤍 Add to Favorites",command=toggle_favorite)        
             rows = 1
-            for i in [title,price,year,milage,location,buy_btn,intrest_clac]:
+            for i in [title,price,year,milage,location,buy_btn,intrest_clac,favorite_button]:
                 i.grid(sticky = 'n' , row = rows , column = 0 , columnspan = 2,pady = 5)
                 rows += 1
-            
+    
         thread = threading.Thread(target=scrape_and_update)
         thread.start()
 
@@ -618,6 +658,7 @@ class SearchPage(ctk.CTkFrame, Search):
         self.maxp = 4000000
         self.maxm = 200000
         self.minm = 0
+        self.view_favorites_only = tk.BooleanVar(value=False) 
         self.filter_text = ""
         self.selected_brand = "All Brands"
         self.brands = [
@@ -629,6 +670,13 @@ class SearchPage(ctk.CTkFrame, Search):
         "Bentley", "Dodge", "Jeep"
     ]
         self.create_page()
+    def toggle_view_favorites(self):
+        self.page_multiplier = 0
+        self.create_page()
+    def get_user_favorites(self):
+        if self.controller.current_user:
+            return self.controller.user_manager.get_favorites(self.controller.current_user["username"])
+        return []
     def update_mile(self,*args):
         new_val = self.barmilage.getValues()
         self.minm = new_val[0]
@@ -647,11 +695,11 @@ class SearchPage(ctk.CTkFrame, Search):
         self.frame1 = ctk.CTkFrame(self, width=400, height=800)
         self.frame1.grid(row=0, column=0, sticky="nesw", rowspan=5, padx = (10,0))
         mile = ctk.CTkLabel(self.frame1,text="Mileage Range" , text_color= "white")
-        mile.grid(row= 0, column = 0 , padx = 10, pady = (35,0))
+        mile.pack(pady = (35,0))
         mileleft = ctk.DoubleVar(value=self.minm)
         mileright = ctk.DoubleVar(value=self.maxm)
         self.barmilage = RangeSliderH(self.frame1,[mileleft,mileright],padX=40,bgColor = '#333333',min_val= 0, max_val=200000,bar_color_inner = '#2fa572',font_size = 12,line_s_color = '#2fa572' , font_color= '#ffffff')
-        self.barmilage.grid(row= 1,column=0,padx=10)
+        self.barmilage.pack(pady = 10)
         mileleft.trace_add('write',self.update_mile)
         mileright.trace_add('write',self.update_mile)
         priceleft = ctk.DoubleVar(value= self.minp)
@@ -660,8 +708,17 @@ class SearchPage(ctk.CTkFrame, Search):
         priceleft.trace_add('write',self.update_price)
         priceright.trace_add("write",self.update_price)
         price = ctk.CTkLabel(self.frame1,text="Price Range", text_color="white")
-        price.grid(row = 2,column = 0, padx = 10, pady = (  5,0))
-        self.barprice.grid(row= 3,column=0,padx=10)
+        price.pack(pady = 10)
+        self.barprice.pack(pady = 10)
+        toggle_switch = ctk.CTkCheckBox(
+            self.frame1,
+            text="View Favorites Only",
+            variable=self.view_favorites_only,
+            onvalue=True,
+            offvalue=False,
+            command=self.toggle_view_favorites  
+        )
+        toggle_switch.pack(pady = 10)
 
         self.e1 = ctk.CTkEntry(self, width=600, height=50,placeholder_text="Search")
         self.e1.grid(row=0, column=1, sticky="n", padx=(15, 0),pady =  (10,20))
@@ -670,12 +727,13 @@ class SearchPage(ctk.CTkFrame, Search):
         Home = ctk.CTkButton(self, width=50, height=50, command=self.on_home, image=home_img, bg_color="transparent", text="")
         Home.place(x=1050, y=10)
         brand_label = ctk.CTkLabel(self.frame1, text="Car Brand", text_color="white")
-        brand_label.grid(row=4, column=0, padx=10, pady=(10, 0))
+        brand_label.pack(pady = 10)
         self.brand_menu = ctk.CTkOptionMenu(self.frame1, values=self.brands, command=self.update_brand)
         self.brand_menu.set(self.selected_brand) 
-        self.brand_menu.grid(row=5, column=0, padx=10, pady=(0, 20)) 
+        self.brand_menu.pack(pady = 10)
+        cars_to_display = self.get_user_favorites() if self.view_favorites_only.get() else self.car_data        
         filtered_data = []
-        for car in self.car_data:
+        for car in cars_to_display:
             try:
                 mileage_str = car['mileage'].lower().replace('km', '').replace(',', '').strip()
                 
@@ -707,7 +765,10 @@ class SearchPage(ctk.CTkFrame, Search):
                     filtered_data.append(car)
             except:
                 print(car)
-
+        if not filtered_data:
+            no_data_label = ctk.CTkLabel(self, text="No cars match the criteria.")
+            no_data_label.grid(row=1, column=0, columnspan=2, pady=20)
+            return
         start_index = self.page_multiplier * 4
         end_index = start_index + 4
         displayed_cars = filtered_data[start_index:end_index]
@@ -736,15 +797,20 @@ class SearchPage(ctk.CTkFrame, Search):
         else:
             self.last_page = True
         apply_btn = ctk.CTkButton(self.frame1,text="Apply",command=self.apply)
-        apply_btn.grid(row = 6,column = 0 , sticky = 'n')
+        apply_btn.pack(pady = 10)
         log_out_btn = ctk.CTkButton(self.frame1,text='Log Out', command= self.log_out)
-        log_out_btn.grid(row = 8 , column = 0 , pady = 10 , sticky = 'n')
+        log_out_btn.pack(pady = 10)
         if self.controller.current_user and self.controller.current_user["is_admin"]:
             manager_btn = ctk.CTkButton(self.frame1, text="Admin Panel", command=self.admin_swap)
-            manager_btn.grid(row=10, column=0, sticky="n", pady = 10)
+            manager_btn.pack(pady = 10)
     def log_out(self):
         self.controller.current_user = None
-        self.controller.data_manager = DataManager()
+        new_data_manager = DataManager()
+        for frame_name, frame in self.controller.frames.items():
+            if hasattr(frame, "data_manager"):
+                frame.data_manager = new_data_manager
+        self.controller.frames['SearchPage'].create_page()
+        self.controller.frames['AdminPage'].refresh_graphs()
         self.controller.show_frame("RegisterPage")
     def on_search(self):
         self.create_page()
