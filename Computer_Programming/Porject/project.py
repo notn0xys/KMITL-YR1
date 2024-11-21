@@ -84,7 +84,6 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         width = self.winfo_screenwidth()
-        self.bind("<F11>", lambda event: self.attributes("-fullscreen", not self.attributes("-fullscreen")))
         height = self.winfo_screenheight()
         self.geometry(f"{int(width * 0.82)}x{int(height * 0.82)}")
         self.minsize(800, 650)  
