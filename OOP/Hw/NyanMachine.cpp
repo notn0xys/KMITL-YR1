@@ -38,7 +38,7 @@ private:
             cin >> x;
         }
         return x;
-    }
+    }  
     Money amount_of_bills(int total) {
         Money money;
         money.bill100 = total / 100;
@@ -51,6 +51,27 @@ private:
         total = total % 5;
         money.coin1 = total;
         return money;
+    }
+    bool enoughStock(Money system, Money user) {
+        if (system.bill100 < user.bill100) {
+            cout << "Machine only has " << system.bill100 << " $100 bills" << "Change needed is " << user.bill100 << endl;
+        }
+        if (system.bill20 < user.bill20) {
+            cout << "Machine only has " << system.bill20 << " $20 bills" << "Change needed is " << user.bill20 << endl;
+        }
+        if (system.coin10 < user.coin10) {
+            cout << "Machine only has " << system.coin10 << " $10 coins" << "Change needed is " << user.coin10 << endl;
+        }
+        if (system.coin5 < user.coin5) {
+            cout << "Machine only has " << system.coin5 << " $5 coins" << "Change needed is " << user.coin5 << endl;
+        }
+        if (system.coin1 < user.coin1) {
+            cout << "Machine only has " << system.coin1 << " $1 coins" << "Change needed is " << user.coin1 << endl;
+        }
+        if (system.bill100 < user.bill100 || system.bill20 < user.bill20 || system.coin10 < user.coin10 || system.coin5 < user.coin5 || system.coin1 < user.coin1) {
+            return false;
+        }
+        return true;
     }
     Money get_collectionbox() {
         Money collection;
@@ -194,6 +215,39 @@ private:
             return to_string(amount);
         }
     }
+    int getmorethan0() {
+        int x;
+        cin >> x;
+        while (cin.fail() || x <= 0) {
+            cout << "Invalid input. Please enter a number greater than 0: ";
+            cin.clear();
+            cin.ignore(256, '\n');
+            cin >> x;
+        }
+        return x;
+    }
+    bool isValid(vector<VendingMachineObject> list_of_goods, Money change, Money collection) {
+        int total_goods = list_of_goods.size();
+        int out_of_stock = 0;
+        bool changeEmpty = false;
+        bool collectionEmpty = false;
+        for (const auto& item : list_of_goods) {
+            if (item.stock == 0) {
+                out_of_stock++;
+            }
+        }
+        if (change.bill100 == 0 || change.bill20 == 0 || change.coin10 == 0 || change.coin5 == 0 || change.coin1 == 0) {
+            changeEmpty = true;
+        }
+        if (collection.bill100 == 0 || collection.bill20 == 0 || collection.coin10 == 0 || collection.coin5 == 0 || collection.coin1 == 0) {
+            collectionEmpty = true;
+        }
+        if (out_of_stock * 2 >= total_goods || changeEmpty || collectionEmpty) {
+            return false;
+        }
+        return true;
+
+    }
     void usermode() {
         int items;
         bool found;
@@ -202,6 +256,7 @@ private:
         int inputmoney;
         int returnmoney;
         int x;
+        bool valid;
         Money change;
         Money collection;
         Money ChangeBox;
@@ -211,18 +266,25 @@ private:
             VendingMachineObject targetedItem; 
             system("cls");
             vector<VendingMachineObject> list_of_goods = get_update_information();
-            cout << "Items available in the vending machine:\n";
+            ChangeBox = get_changebox();
+            CollectionBox = get_collectionbox();
+            cout << "Items available in the vendng machine:\n";
             for (const auto& item : list_of_goods) {
                 cout << "ID: " << item.id << ", Name: " << item.name << ", Stock: " << displayStock(item.stock) << ", Price: " << item.price << endl;
             }
-            cout << "Press " << list_of_goods.size() + 1 << " to exit" << endl;
+            valid = isValid(list_of_goods,ChangeBox,CollectionBox);
+            if (!valid) {
+                cout << "Not enough stock to continue, please contact the admin" << endl;
+                return;
+            }
+            cout << "Enter " << list_of_goods.size() + 1 << " to exit" << endl;
             cout << "Choose which item you would like to purchase from the id" << endl;
             input = getint();
             if (input == list_of_goods.size() + 1){
                 break;
             }
             for (const auto& item: list_of_goods) {
-                if (input = item.id) {
+                if (input == item.id) {
                     targetedItem = item;
                     found = true;
                     break;
@@ -254,8 +316,20 @@ private:
                 collection = amount_of_bills(inputmoney);
                 returnmoney = inputmoney - amounttopay;
                 change = amount_of_bills(returnmoney);
-                ChangeBox = get_changebox();
-                CollectionBox = get_collectionbox();
+                while (!enoughStock(ChangeBox, change)) {
+                    cout << "Not enough money in the Changebox \n Please try to enter the exact amount" << endl;
+                    inputmoney = getint();
+                    while (inputmoney < amounttopay) {
+                    cout << "Not enough money, please insert more money" << endl;
+                    x = getint();
+                    inputmoney += x;
+                    }
+                    cout << "You have inserted " << inputmoney << endl;
+                    cout << "your change is" << inputmoney - amounttopay << endl;
+                    collection = amount_of_bills(inputmoney);
+                    returnmoney = inputmoney - amounttopay;
+                    change = amount_of_bills(returnmoney);
+                }
                 CollectionBox.bill100 += collection.bill100;
                 CollectionBox.bill20 += collection.bill20;
                 CollectionBox.coin10 += collection.coin10;
@@ -272,8 +346,6 @@ private:
                 targetedItem.stock -= items;
                 Modify_stock(targetedItem);
             }
-            
-
         }       
     }
 
@@ -288,12 +360,12 @@ private:
     }
     int onstart() {
         rc = sqlite3_open("Stock_67011177.db", &db);
-        if (rc) {
-            cerr << "Can't open database: " << sqlite3_errmsg(db) << endl;
-            return rc;
-        } else {
-            cout << "Opened database successfully!" << endl;
-        }
+        if (rc) { 
+            cerr << "Can't open database: " << sqlite3_errmsg(db) << endl; 
+            return rc; 
+        } else { 
+            cout << "Opened database successfully!" << endl; 
+        } 
 
         const char* createTableSQL = R"(
         CREATE TABLE IF NOT EXISTS stock_67011177 (
@@ -302,7 +374,7 @@ private:
             stock INTEGER NOT NULL,
             price INTEGER NOT NULL
         );
-        )";
+        )";    
         rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
         if (rc != SQLITE_OK) {
             cerr << "SQL error: " << errMsg << endl;
@@ -312,7 +384,7 @@ private:
         }
         const char* CreateCollectionBox = R"(
         CREATE TABLE IF NOT EXISTS collectionbox (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY CHECK (id = 1),
         Bill_100 INTEGER NOT NULL,
         Bill_20 INTEGER NOT NULL,
         Coin_10 INTEGER NOT NULL,
@@ -329,7 +401,7 @@ private:
         }
         const char* CreateChangeBox = R"(
         CREATE TABLE IF NOT EXISTS changebox (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY CHECK (id = 1),
         Bill_100 INTEGER NOT NULL,
         Bill_20 INTEGER NOT NULL,
         Coin_10 INTEGER NOT NULL,
@@ -343,6 +415,26 @@ private:
             sqlite3_free(errMsg);
         } else {
             cout << "Table created successfully!" << endl;
+        }
+        const char* insertCollectionBox = R"(
+        INSERT INTO collectionbox (id, Bill_100, Bill_20, Coin_10, Coin_5, Coin_1) VALUES (1, 0, 0, 0, 0, 0) ON CONFLICT(id) DO NOTHING;
+        )";
+        rc = sqlite3_exec(db, insertCollectionBox, nullptr, nullptr, &errMsg);
+        if (rc != SQLITE_OK) {
+            cerr << "SQL error: " << errMsg << endl;
+            sqlite3_free(errMsg);
+        } else {
+            cout << "Line sucessfully inserted created successfully!" << endl;
+        }
+                const char* insertChangeBox = R"(
+        INSERT INTO changebox (id, Bill_100, Bill_20, Coin_10, Coin_5, Coin_1) VALUES (1, 100, 100, 100, 100, 100) ON CONFLICT(id) DO NOTHING;
+        )";
+        rc = sqlite3_exec(db, insertCollectionBox, nullptr, nullptr, &errMsg);
+        if (rc != SQLITE_OK) {
+            cerr << "SQL error: " << errMsg << endl;
+            sqlite3_free(errMsg);
+        } else {
+            cout << "First time set up default to 100 stock" << endl;
         }
         return 0;
     }
