@@ -97,7 +97,7 @@ private:
         if (sqlite3_exec(db, sql, callback, &collection, nullptr) != SQLITE_OK) {
             cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
         }
-        return collection;
+           return collection;
     }
     void Modify_stock(VendingMachineObject item) {
         const char* sql = "UPDATE stock_67011177 SET stock = ? WHERE id = ?;";
@@ -254,6 +254,7 @@ private:
         int returnmoney;
         int x;
         bool valid;
+        string action;
         Money change;
         Money collection;
         Money ChangeBox;
@@ -340,8 +341,10 @@ private:
                 ChangeBox.coin1 -= change.coin1;
                 modify_changebox(ChangeBox);
                 cout << "You have successfully purchased " << items << " " << targetedItem.name << endl;
+                action = "Purchased " + to_string(items) + " " + targetedItem.name;
                 targetedItem.stock -= items;
                 Modify_stock(targetedItem);
+                addlogs(action, "User");
             }
         }       
     }
@@ -351,6 +354,7 @@ private:
         int stock = inital_stock;
         int price;
         char input;
+        string action;
         cout << "Enter the name of the item: ";
         cin >> name;
         cout << "Do you wish to Enter a a custom amount of item stock (y/n)" << endl;
@@ -376,12 +380,14 @@ private:
         }
         sqlite3_finalize(stmt);
         cout << "Item added successfully!" << endl;
+        addlogs("Added item " + name, "Admin");
         return;
     }
     int setinitialItem() {
         cout << "Set the default values of stock that items will be added" << endl;
         int id;
         id = getmorethan0();
+        addlogs("Set initial stock to " + to_string(id), "Admin");
         return id;
     }
     void restockitem(vector<VendingMachineObject> items){
@@ -389,6 +395,7 @@ private:
         bool found = false;
         int newinput;
         char quit;
+        string action;
         VendingMachineObject targetedItem;
         while (true) {
             for (auto item : items) {
@@ -418,7 +425,9 @@ private:
                 targetedItem.stock = newinput;
                 cout << "Stock for " << targetedItem.name << " Changed to " << targetedItem.stock << endl;
                 Modify_stock(targetedItem);
-                cout << "Done ennter q to return to menu";
+                action = "Restocked item id " + to_string(targetedItem.id);
+                addlogs(action, "Admin");
+                cout << "Done enter q to return to menu";
                 cin >> quit;
                 if (quit == 'q') {
                     return;
@@ -448,38 +457,124 @@ private:
         cout << "Changebox restocked successfully!" << endl;
         Money newchange = get_changebox();
         cout << "New Changebox: $100 bills: " << newchange.bill100 << ", $20 bills: " << newchange.bill20 << ", $10 coins: " << newchange.coin10 << ", $5 coins: " << newchange.coin5 << ", $1 coins: " << newchange.coin1 << endl;
+        addlogs("Restocked Changebox", "Admin");
         return;
     }
     void ModifyCollectbox() {
+        int choice;
         Money collection;
-        cout << "Enter the amount of $100 bills: ";
-        collection.bill100 = getmorethan0();
-        cout << "Enter the amount of $20 bills: ";
-        collection.bill20 = getmorethan0();
-        cout << "Enter the amount of $10 coins: ";
-        collection.coin10 = getmorethan0();
-        cout << "Enter the amount of $5 coins: ";
-        collection.coin5 = getmorethan0();
-        cout << "Enter the amount of $1 coins: ";
-        collection.coin1 = getmorethan0();
-        Money old_collection = get_collectionbox();
-        cout << "Old Collectionbox: $100 bills: " << old_collection.bill100 << ", $20 bills: " << old_collection.bill20 << ", $10 coins: " << old_collection.coin10 << ", $5 coins: " << old_collection.coin5 << ", $1 coins: " << old_collection.coin1 << endl;
-        old_collection.bill100 -= collection.bill100;
-        old_collection.bill20 -= collection.bill20;
-        old_collection.coin10 -= collection.coin10;
-        old_collection.coin5 -= collection.coin5;
-        old_collection.coin1 -= collection.coin1;
-        Modify_collectionbox(old_collection);
-        cout << "Collectionbox emptied successfully!" << endl;
-        Money new_collection = get_collectionbox();
-        cout << "New Collectionbox: $100 bills: " << new_collection.bill100 << ", $20 bills: " << new_collection.bill20 << ", $10 coins: " << new_collection.coin10 << ", $5 coins: " << new_collection.coin5 << ", $1 coins: " << new_collection.coin1 << endl;
-        return;
+        Money old_collection;
+        Money new_collection;
+        while (true) {
+            cout << "Please choose 1 to add 2 to remove 3 to return \n";
+            choice = getint();
+            switch (choice) {
+                case 1: 
+                    old_collection = get_collectionbox();
+                    cout << "Enter the amount of $100 bills: ";
+                    collection.bill100 = getmorethan0();
+                    cout << "Enter the amount of $20 bills: ";
+                    collection.bill20 = getmorethan0();
+                    cout << "Enter the amount of $10 coins: ";
+                    collection.coin10 = getmorethan0();
+                    cout << "Enter the amount of $5 coins: ";
+                    collection.coin5 = getmorethan0();
+                    cout << "Enter the amount of $1 coins: ";
+                    collection.coin1 = getmorethan0();
+                    old_collection.bill100 += collection.bill100;
+                    old_collection.bill20 += collection.bill20;
+                    old_collection.coin10 += collection.coin10;
+                    old_collection.coin5 += collection.coin5;
+                    old_collection.coin1 += collection.coin1;
+                    Modify_collectionbox(old_collection);
+                    cout << "Collectionbox modified successfully!" << endl;
+                    new_collection = get_collectionbox();
+                    cout << "New Collectionbox: $100 bills: " << new_collection.bill100 << ", $20 bills: " << new_collection.bill20 << ", $10 coins: " << new_collection.coin10 << ", $5 coins: " << new_collection.coin5 << ", $1 coins: " << new_collection.coin1 << endl;
+                    addlogs("Added into Collectionbox", "Admin");
+                    break;
+                case 2:
+                    cout << "Enter the amount of $100 bills: ";
+                    collection.bill100 = getmorethan0();
+                    cout << "Enter the amount of $20 bills: ";
+                    collection.bill20 = getmorethan0();
+                    cout << "Enter the amount of $10 coins: ";
+                    collection.coin10 = getmorethan0();
+                    cout << "Enter the amount of $5 coins: ";
+                    collection.coin5 = getmorethan0();
+                    cout << "Enter the amount of $1 coins: ";
+                    collection.coin1 = getmorethan0();
+                    old_collection = get_collectionbox();
+                    cout << "Old Collectionbox: $100 bills: " << old_collection.bill100 << ", $20 bills: " << old_collection.bill20 << ", $10 coins: " << old_collection.coin10 << ", $5 coins: " << old_collection.coin5 << ", $1 coins: " << old_collection.coin1 << endl;
+                    if (old_collection.bill100 - collection.bill100 < 0) {
+                        cout << "Collection Box cant be lower than 0 setting to 0" << endl;
+                        old_collection.bill100 = 0;
+                    }
+                    else{
+                        old_collection.bill100 -= collection.bill100;
+                    }
+                    if (old_collection.bill20 - collection.bill20 < 0) {
+                        cout << "Collection Box cant be lower than 0 setting to 0" << endl;
+                        old_collection.bill20 = 0;
+                    }
+                    else{
+                        old_collection.bill20 -= collection.bill20;
+                    }
+                    if (old_collection.coin10 - collection.coin10 < 0) {
+                        cout << "Collection Box cant be lower than 0 setting to 0" << endl;
+                        old_collection.coin10 = 0;
+                    }
+                    else{
+                        old_collection.coin10 -= collection.coin10;
+                    }
+                    if (old_collection.coin5 - collection.coin5 < 0) {
+                        cout << "Collection Box cant be lower than 0 setting to 0" << endl;
+                        old_collection.coin5 = 0;
+                    }
+                    else{
+                        old_collection.coin5 -= collection.coin5;
+                    }
+                    if (old_collection.coin1 - collection.coin1 < 0) {
+                        cout << "Collection Box cant be lower than 0 setting to 0" << endl;
+                        old_collection.coin1 = 0;
+                    }
+                    else{
+                        old_collection.coin1 -= collection.coin1;
+                    }
+                    Modify_collectionbox(old_collection);
+                    cout << "Collectionbox emptied successfully!" << endl;
+                    new_collection = get_collectionbox();
+                    cout << "New Collectionbox: $100 bills: " << new_collection.bill100 << ", $20 bills: " << new_collection.bill20 << ", $10 coins: " << new_collection.coin10 << ", $5 coins: " << new_collection.coin5 << ", $1 coins: " << new_collection.coin1 << endl;
+                    addlogs("Removed from Collectionbox", "Admin");
+                    break;
+                case 3:
+                    return;
+                default:
+                    cout << "Invalid choice. Please try again.\n";
+                    break;
+            }
+        }
+    }
+    void addlogs(string action, string doneby) {
+        const char* sql = "INSERT INTO logs (action, doneby) VALUES (?, ?);";
+        sqlite3_stmt* stmt;
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+        if (rc != SQLITE_OK) {
+            cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+        }
+        sqlite3_bind_text(stmt, 1, action.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, doneby.c_str(), -1, SQLITE_STATIC);
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_DONE) {
+            cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+        }
+        sqlite3_finalize(stmt);
     }
     void checkChangebox() {
         Money change = get_changebox();
         cout << "Changebox: $100 bills: " << change.bill100 << ", $20 bills: " << change.bill20 << ", $10 coins: " << change.coin10 << ", $5 coins: " << change.coin5 << ", $1 coins: " << change.coin1 << endl;
         int amount = change.bill100 * 100 + change.bill20 * 20 + change.coin10 * 10 + change.coin5 * 5 + change.coin1;
         cout << "Total amount in the changebox: " << amount << endl;
+        addlogs("Checked Changebox", "Admin");
         return ;
     }
     void checkCollectionbox() {
@@ -487,6 +582,7 @@ private:
         cout << "Collectionbox: $100 bills: " << collection.bill100 << ", $20 bills: " << collection.bill20 << ", $10 coins: " << collection.coin10 << ", $5 coins: " << collection.coin5 << ", $1 coins: " << collection.coin1 << endl;
         int amount = collection.bill100 * 100 + collection.bill20 * 20 + collection.coin10 * 10 + collection.coin5 * 5 + collection.coin1;
         cout << "Total amount in the collectionbox: " << amount << endl;
+        addlogs("Checked Collectionbox", "Admin");
         return ;
     }
     void adminmode() {
@@ -497,7 +593,7 @@ private:
         while (true) {
             int choice;
             cout << "Please choose from these options: \n";
-            cout << "1: Add item\n2: Set initial stock\n3: Restock item\n4: Check Changebox\n5: Check Collectionbox\n6: Modify Collectionbox\n7: Restock Changebox\n8: Exit admin mode\n";
+            cout << "1: Add item\n2: Set initial stock\n3: Restock item\n4: Check Changebox\n5: Check Collectionbox\n6: Modify Collectionbox\n7: Restock Changebox\n8: Check Logs\n9: Exit admin mode\n";
             cout << "Enter your choice: ";
             choice = getint();
 
@@ -524,6 +620,9 @@ private:
                 restockChangebox();
                 break;
             case 8:
+                printlogs();
+                break;
+            case 9:
                 cout << "Exiting admin mode.\n";
                 return;
             default:
@@ -537,6 +636,19 @@ private:
         cout << "Exiting the vending machine. Goodbye!\n";
         sqlite3_close(db);
         return;
+    }
+    void printlogs() {
+        auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+            for (int i = 0; i < argc; i++) {
+                cout << azColName[i] << ": " << (argv[i] ? argv[i] : "NULL") << endl;
+            }
+            cout << endl;
+            return 0;
+        };
+        const char* sql = "SELECT * FROM logs;";
+        if (sqlite3_exec(db, sql, callback, nullptr, nullptr) != SQLITE_OK) {
+            cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+        }
     }
     int onstart() {
         rc = sqlite3_open("Stock_67011177.db", &db);
@@ -571,6 +683,12 @@ private:
         Coin_10 INTEGER NOT NULL,
         Coin_5 INTEGER NOT NULL,
         Coin_1 INTEGER NOT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        action TEXT NOT NULL,
+        doneby TEXT NOT NULL
         );
         )";    
         rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
