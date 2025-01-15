@@ -52,6 +52,7 @@ private:
         money.coin1 = total;
         return money;
     }
+    
     bool enoughStock(Money system, Money user) {
         if (system.bill100 < user.bill100) {
             cout << "Machine only has " << system.bill100 << " $100 bills" << "Change needed is " << user.bill100 << endl;
@@ -230,16 +231,20 @@ private:
         int total_goods = list_of_goods.size();
         int out_of_stock = 0;
         bool changeEmpty = false;
-        bool collectionEmpty = false;
+        bool collectionFull = false;
         for (const auto& item : list_of_goods) {
             if (item.stock == 0) {
                 out_of_stock++;
             }
         }
+        int max = getMaxCapacity();
+        if (collection.bill100 >= max || collection.bill20 >= max || collection.coin10 >= max || collection.coin5 >= max || collection.coin1 >= max) {
+            collectionFull = true;
+        }
         if (change.bill100 == 0 || change.bill20 == 0 || change.coin10 == 0 || change.coin5 == 0 || change.coin1 == 0) {
             changeEmpty = true;
         }
-        if (out_of_stock * 2 >= total_goods || changeEmpty || collectionEmpty) {
+        if (out_of_stock * 2 >= total_goods || changeEmpty || collectionFull) {
             return false;
         }
         return true;
@@ -272,7 +277,7 @@ private:
             }
             valid = isValid(list_of_goods,ChangeBox,CollectionBox);
             if (!valid) {
-                cout << "Not enough stock to continue, please contact the admin" << endl;
+                cout << "please contact the admin" << endl;
                 return;
             }
             cout << "Enter " << list_of_goods.size() + 1 << " to exit" << endl;
@@ -554,6 +559,22 @@ private:
             }
         }
     }
+    void modify_MaxCollection(int max) {
+        const char* sql = "UPDATE collectionbox SET Max_Capacity = ? WHERE id = 1;";
+        sqlite3_stmt* stmt;
+        rc = sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+        if (rc != SQLITE_OK) {
+            cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+        }
+        sqlite3_bind_int(stmt, 1, max);
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_DONE) {
+            cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+        }
+        sqlite3_finalize(stmt);
+        addlogs("Modified Max Capacity of Collectionbox", "Admin");
+        return;
+    }
     void addlogs(string action, string doneby) {
         const char* sql = "INSERT INTO logs (action, doneby) VALUES (?, ?);";
         sqlite3_stmt* stmt;
@@ -585,6 +606,19 @@ private:
         addlogs("Checked Collectionbox", "Admin");
         return ;
     }
+    int getMaxCapacity() {
+        const char* sql = "SELECT Max_Capacity FROM collectionbox WHERE id = 1;";
+        int max;
+        auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
+            int* max = static_cast<int*>(data);
+            *max = argv[0] ? stoi(argv[0]) : 0;
+            return 0;
+        };
+        if (sqlite3_exec(db, sql, callback, &max, nullptr) != SQLITE_OK) {
+            cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
+        }
+        return max;
+    }
     void adminmode() {
         int inital_stock = 20;
         vector<VendingMachineObject> item;
@@ -593,7 +627,7 @@ private:
         while (true) {
             int choice;
             cout << "Please choose from these options: \n";
-            cout << "1: Add item\n2: Set initial stock\n3: Restock item\n4: Check Changebox\n5: Check Collectionbox\n6: Modify Collectionbox\n7: Restock Changebox\n8: Check Logs\n9: Exit admin mode\n";
+            cout << "1: Add item\n2: Set initial stock\n3: Restock item\n4: Check Changebox\n5: Check Collectionbox\n6: Modify Collectionbox\n7: Restock Changebox\n8: Check Logs\n9: Modify Max Collection\n10: Exit admin mode\n";
             cout << "Enter your choice: ";
             choice = getint();
 
@@ -623,6 +657,12 @@ private:
                 printlogs();
                 break;
             case 9:
+                int max;
+                cout << "Enter the new max capacity of the collectionbox: ";
+                max = getmorethan0();
+                modify_MaxCollection(max);
+                break;
+            case 10:
                 cout << "Exiting admin mode.\n";
                 return;
             default:
@@ -673,7 +713,9 @@ private:
         Bill_20 INTEGER NOT NULL,
         Coin_10 INTEGER NOT NULL,
         Coin_5 INTEGER NOT NULL,
-        Coin_1 INTEGER NOT NULL
+        Coin_1 INTEGER NOT NULL,
+        Max_Capacity INTEGER NOT NULL
+
         );
 
         CREATE TABLE IF NOT EXISTS changebox (
@@ -699,7 +741,7 @@ private:
             cout << "Table created successfully!" << endl;
         }
         const char* insertCollectionBox = R"(
-        INSERT INTO collectionbox (id, Bill_100, Bill_20, Coin_10, Coin_5, Coin_1) VALUES (1, 0, 0, 0, 0, 0) ON CONFLICT(id) DO NOTHING;
+        INSERT INTO collectionbox (id, Bill_100, Bill_20, Coin_10, Coin_5, Coin_1, Max_Capacity) VALUES (1, 0, 0, 0, 0, 0, 1000) ON CONFLICT(id) DO NOTHING;
         INSERT INTO changebox (id, Bill_100, Bill_20, Coin_10, Coin_5, Coin_1) VALUES (1, 100, 100, 100, 100, 100) ON CONFLICT(id) DO NOTHING;
         )";
         rc = sqlite3_exec(db, insertCollectionBox, nullptr, nullptr, &errMsg);
