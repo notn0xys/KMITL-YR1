@@ -9,6 +9,15 @@ void print_matrix(vector<vector<int>> matrix) {
         cout << "\n";
     }
 }
+vector<vector<int>> transpost(const vector<vector<int>>& matrix) {
+    vector<vector<int>> return_matrix = matrix;
+    for (int i = 0; i < matrix.size(); i++) {
+        for (int j = 0; j < matrix[0].size(); j++) {
+            return_matrix[j][i] = matrix[i][j];
+        }
+    }
+    return return_matrix;
+}
 int main() {
     vector<vector<int>> matrix;
     vector<int> row;
@@ -24,4 +33,6 @@ int main() {
         row.clear();
     }
     print_matrix(matrix);
+    vector<vector<int>> matrix2 = transpost(matrix);
+    print_matrix(matrix2);
 }
