@@ -5,6 +5,7 @@
 #include <vector>
 
 using namespace std;
+//Structs used to store the data in a more organized way used for Collection box, Change box to ensure it is compatible with the database
 struct Money{
     int bill100;
     int bill20;
@@ -12,13 +13,14 @@ struct Money{
     int coin5;
     int coin1;
 };
+//Struct to store each item from stock each object is a row in the database
 struct VendingMachineObject {
     int id;
     string name;
     int stock;
     int price;
 };
-
+//Main veding machine class used to run the entire program lol
 class VendingMachine {
 private:
     sqlite3* db;
@@ -28,6 +30,7 @@ private:
     int Charge = 0;
     int moneybox = 0;
     bool exit = false;
+    //function to get the integer from the user and will keep asking till an integer is inputted
     int getint() {
         int x;
         cin >> x;
@@ -39,6 +42,7 @@ private:
         }
         return x;
     }  
+    //function to get the amount of bills and coins needed to return to the user as a struct of Money for ease of use and generalization in the code
     Money amount_of_bills(int total) {
         Money money;
         money.bill100 = total / 100;
@@ -52,7 +56,7 @@ private:
         money.coin1 = total;
         return money;
     }
-    
+    //function to check if the vending machine has enough change to return to the user
     bool enoughStock(Money system, Money user) {
         if (system.bill100 < user.bill100) {
             cout << "Machine only has " << system.bill100 << " $100 bills" << "Change needed is " << user.bill100 << endl;
@@ -74,6 +78,7 @@ private:
         }
         return true;
     }
+    //function to get the data from the collection box in the sqlite database
     Money get_collectionbox() {
         Money collection;
         auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
@@ -100,6 +105,7 @@ private:
         }
            return collection;
     }
+    //function to modify a stock of an item by item id.
     void Modify_stock(VendingMachineObject item) {
         const char* sql = "UPDATE stock_67011177 SET stock = ? WHERE id = ?;";
         sqlite3_stmt* stmt;
@@ -114,7 +120,10 @@ private:
             cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
         }
         sqlite3_finalize(stmt);
+        addlogs("Modified stock of " + item.name, "Admin");
+        return;
     }
+    // Main function to modify the collection box in the sqlite database
     Money Modify_collectionbox(Money collection) {
         const char* sql = "UPDATE collectionbox SET Bill_100 = ?, Bill_20 = ?, Coin_10 = ?, Coin_5 = ?, Coin_1 = ? WHERE id = 1;";
         sqlite3_stmt* stmt;
@@ -134,6 +143,7 @@ private:
         sqlite3_finalize(stmt);
         return collection;
     }
+    // Functuon to get the changebox from the sqlite database as a Money struct for ease of use
     Money get_changebox() {
         Money change;
         auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
@@ -159,7 +169,8 @@ private:
             cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
         }
         return change;
-    }
+    } 
+    // Function to update the change box in the sqlite database
     Money modify_changebox(Money change) {
         const char* sql = "UPDATE changebox SET Bill_100 = ?, Bill_20 = ?, Coin_10 = ?, Coin_5 = ?, Coin_1 = ? WHERE id = 1;";
         sqlite3_stmt* stmt;
@@ -179,6 +190,7 @@ private:
         sqlite3_finalize(stmt);
         return change;
     }
+    //function that returns vectors of all the items in the vending machine as a type of Vending Machine Object
     vector<VendingMachineObject> get_update_information() {
         vector<VendingMachineObject> stockItems;
 
@@ -209,6 +221,7 @@ private:
 
         return stockItems;
     }
+    //Function To Detect if an amount is 0 if 
     string displayStock(int amount) {
         if (amount == 0) {
             return "Out of stock";
@@ -216,6 +229,7 @@ private:
             return to_string(amount);
         }
     }
+    //function to get an integer that is greater than 0 will keep asking the user for input till the input is valid
     int getmorethan0() {
         int x;
         cin >> x;
@@ -227,6 +241,7 @@ private:
         }
         return x;
     }
+    // Function to check if there is enough stock or change in the vending machine or if the collection box is full
     bool isValid(vector<VendingMachineObject> list_of_goods, Money change, Money collection) {
         int total_goods = list_of_goods.size();
         int out_of_stock = 0;
@@ -250,6 +265,7 @@ private:
         return true;
 
     }
+    // Main usermode function that runs the vending machine for the user allows the user to purchase the items
     void usermode() {
         int items;
         bool found;
@@ -275,6 +291,7 @@ private:
             for (auto item : list_of_goods) {
                 cout << "ID: " << item.id << ", Name: " << item.name << ", Stock: " << displayStock(item.stock) << ", Price: " << item.price << endl;
             }
+            // If not valid will return to the main menu ussermode wont be able to be used till admin fixes the issue
             valid = isValid(list_of_goods,ChangeBox,CollectionBox);
             if (!valid) {
                 cout << "please contact the admin" << endl;
@@ -286,6 +303,7 @@ private:
             if (input == list_of_goods.size() + 1){
                 break;
             }
+            // Check weather the item is in the list of goods
             for (const auto& item: list_of_goods) {
                 if (input == item.id) {
                     targetedItem = item;
@@ -309,6 +327,7 @@ private:
                 cout << "The total amount you need to pay is " << amounttopay << endl;
                 cout << "Please insert the money" << endl;
                 inputmoney = getint();
+                // Make sure enough money is inputted if not will keep asking for money till it is met
                 while (inputmoney < amounttopay) {
                     cout << "Not enough money, please insert more money" << endl;
                     x = getint();
@@ -319,6 +338,7 @@ private:
                 collection = amount_of_bills(inputmoney);
                 returnmoney = inputmoney - amounttopay;
                 change = amount_of_bills(returnmoney);
+                // If change box doesnt have enough change to do the transaction will keep asking for the exact amount or an amount that change box can output
                 while (!enoughStock(ChangeBox, change)) {
                     cout << "Not enough money in the Changebox \n Please try to enter the exact amount" << endl;
                     inputmoney = getint();
@@ -338,12 +358,14 @@ private:
                 CollectionBox.coin10 += collection.coin10;
                 CollectionBox.coin5 += collection.coin5;
                 CollectionBox.coin1 += collection.coin1;
+                //Update Collection box in the databse
                 Modify_collectionbox(CollectionBox);
                 ChangeBox.bill100 -= change.bill100;
                 ChangeBox.bill20 -= change.bill20;
                 ChangeBox.coin10 -= change.coin10;
                 ChangeBox.coin5 -= change.coin5;
                 ChangeBox.coin1 -= change.coin1;
+                //Update Changebox in the database
                 modify_changebox(ChangeBox);
                 cout << "You have successfully purchased " << items << " " << targetedItem.name << endl;
                 action = "Purchased " + to_string(items) + " " + targetedItem.name;
@@ -353,6 +375,7 @@ private:
             }
         }       
     }
+    //Function that allows the admin to add items to the vending machine and be able to choose with the deault stock of the items or custom stock
     void additem(int inital_stock) {
         bool choice;
         string name;
@@ -388,6 +411,7 @@ private:
         addlogs("Added item " + name, "Admin");
         return;
     }
+    //Function that allows the admin to set the default stock of the items
     int setinitialItem() {
         cout << "Set the default values of stock that items will be added" << endl;
         int id;
@@ -395,6 +419,7 @@ private:
         addlogs("Set initial stock to " + to_string(id), "Admin");
         return id;
     }
+    //Function that allows the admin to restock the items in the vending machine by ID
     void restockitem(vector<VendingMachineObject> items){
         int userinput;
         bool found = false;
@@ -440,6 +465,7 @@ private:
             }
         }
     }   
+    //Function that allows the admin to restock the changebox in the vending machine
     void restockChangebox() {
         Money change;
         cout << "Enter the amount of $100 bills: ";
@@ -465,6 +491,7 @@ private:
         addlogs("Restocked Changebox", "Admin");
         return;
     }
+    //Function that allows the admin to either add or remove money from the collection box
     void ModifyCollectbox() {
         int choice;
         Money collection;
@@ -559,6 +586,7 @@ private:
             }
         }
     }
+    //Function to set the max value of the collection box in SQL if this value is it the machine will stop working
     void modify_MaxCollection(int max) {
         const char* sql = "UPDATE collectionbox SET Max_Capacity = ? WHERE id = 1;";
         sqlite3_stmt* stmt;
@@ -575,6 +603,7 @@ private:
         addlogs("Modified Max Capacity of Collectionbox", "Admin");
         return;
     }
+    //Function to keep track of all things happening in the machine and done by which kind of user(admin or user)
     void addlogs(string action, string doneby) {
         const char* sql = "INSERT INTO logs (action, doneby) VALUES (?, ?);";
         sqlite3_stmt* stmt;
@@ -590,6 +619,7 @@ private:
         }
         sqlite3_finalize(stmt);
     }
+    //Function to print the changebox 
     void checkChangebox() {
         Money change = get_changebox();
         cout << "Changebox: $100 bills: " << change.bill100 << ", $20 bills: " << change.bill20 << ", $10 coins: " << change.coin10 << ", $5 coins: " << change.coin5 << ", $1 coins: " << change.coin1 << endl;
@@ -598,6 +628,7 @@ private:
         addlogs("Checked Changebox", "Admin");
         return ;
     }
+    //Function to print the collection box
     void checkCollectionbox() {
         Money collection = get_collectionbox();
         cout << "Collectionbox: $100 bills: " << collection.bill100 << ", $20 bills: " << collection.bill20 << ", $10 coins: " << collection.coin10 << ", $5 coins: " << collection.coin5 << ", $1 coins: " << collection.coin1 << endl;
@@ -606,6 +637,7 @@ private:
         addlogs("Checked Collectionbox", "Admin");
         return ;
     }
+    //function that returns the max capacity used as a helping function to check if valid on not in the isValid function
     int getMaxCapacity() {
         const char* sql = "SELECT Max_Capacity FROM collectionbox WHERE id = 1;";
         int max;
@@ -619,6 +651,7 @@ private:
         }
         return max;
     }
+    //Main admin mode function used to call other functions and act as the main menu for the admin
     void adminmode() {
         int inital_stock = 20;
         vector<VendingMachineObject> item;
@@ -672,11 +705,13 @@ private:
         }
         return;
     }
+    //Closes the database on exit to ensure no funny stuff is happening
     void onexit() {
         cout << "Exiting the vending machine. Goodbye!\n";
         sqlite3_close(db);
         return;
     }
+    //print all the logs that happened
     void printlogs() {
         auto callback = [](void* data, int argc, char** argv, char** azColName) -> int {
             for (int i = 0; i < argc; i++) {
@@ -690,6 +725,9 @@ private:
             cerr << "SQL error: " << sqlite3_errmsg(db) << endl;
         }
     }
+    //function that runs on start up it checks wether there is a database and not it will create the db else it will open and connect
+    // It will also check the tables if they exist or not and it will create them if they dont 
+    // it also ensures that the collection box and change box are created and have a only 1 line which is used to store the values
     int onstart() {
         rc = sqlite3_open("Stock_67011177.db", &db);
         if (rc) { 
@@ -756,10 +794,11 @@ private:
     }
 
 public:
+    //Constructor that runs the onstart function
     VendingMachine() {
         onstart();
     }
-
+    //Main function that runs the vending machine act as a main menu to switch bettween user and admin mode
     void run() {
         while (true) {
             int choice;
@@ -785,7 +824,7 @@ public:
             }
         }
     }
-
+    //Destructor that closes the database
     ~VendingMachine() {
         sqlite3_close(db);
     }
@@ -796,3 +835,4 @@ int main() {
     machine.run();
     return 0;
 }
+
