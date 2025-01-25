@@ -18,6 +18,23 @@ vector<vector<int>> transpost(const vector<vector<int>>& matrix) {
     }
     return return_matrix;
 }
+vector<vector<int>> Multiplication(const vector<vector<int>>& matrix1, const vector<vector<int>>& matrix2) {
+    vector<int> holdiong;
+    vector<vector<int>> return_matrix;
+    int temp_number;
+    for (int i = 0; i < matrix1.size(); i++) {
+        holdiong.clear();
+        for (int j = 0; j < matrix2[0].size(); j++) {
+            temp_number = 0;
+            for (int k = 0 ; k < matrix1[0].size() ;k++) {
+                temp_number += matrix1[i][k] * matrix2[k][j];
+            }
+            holdiong.push_back(temp_number);
+        }
+        return_matrix.push_back(holdiong);
+    }
+    return return_matrix;
+}
 int main() {
     vector<vector<int>> matrix;
     vector<int> row;
@@ -35,4 +52,6 @@ int main() {
     print_matrix(matrix);
     vector<vector<int>> matrix2 = transpost(matrix);
     print_matrix(matrix2);
+    vector<vector<int>> matrix3 = Multiplication(matrix,matrix2);
+    print_matrix(matrix3);
 }
