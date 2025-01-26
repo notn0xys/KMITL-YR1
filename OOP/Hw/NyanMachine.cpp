@@ -789,6 +789,60 @@ private:
         } else {
             cout << "Line sucessfully inserted created successfully!" << endl;
         }
+        const char* insertStockItemsSQL = R"(
+        BEGIN;
+        INSERT INTO stock_67011177 (name, stock, price)
+        SELECT * FROM (
+            SELECT 'Soda' AS name, 20 AS stock, 50 AS price WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Chips', 15, 30 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Candy Bar', 25, 20 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Water Bottle', 30, 15 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Gum Pack', 40, 10 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Cookies', 10, 40 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Energy Drink', 12, 60 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Granola Bar', 18, 25 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Crackers', 20, 35 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Juice Box', 22, 45 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Milk Carton', 15, 50 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Fruit Snacks', 30, 20 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Trail Mix', 12, 55 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Pretzels', 18, 25 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Popcorn', 20, 30 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Chocolate Bar', 25, 45 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Ice Tea', 10, 50 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Yogurt Cup', 8, 60 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Bagel', 10, 40 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+            UNION ALL
+            SELECT 'Donut', 15, 35 WHERE (SELECT COUNT(*) FROM stock_67011177) = 0
+        ) AS items;
+        COMMIT;
+        )";
+        rc = sqlite3_exec(db, insertStockItemsSQL, nullptr, nullptr, &errMsg);
+        if (rc != SQLITE_OK) {
+            cerr << "SQL error: " << errMsg << endl;
+            sqlite3_free(errMsg);
+        } else {
+            cout << "Line sucessfully inserted created successfully!" << endl;
+        }
+
 
         return 0;
     }
