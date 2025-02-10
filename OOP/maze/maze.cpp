@@ -3,7 +3,7 @@
 #include <vector>
 #include <cmath>
 using namespace std;
-//2 will be used to display the solution path 
+// 2 will be used to display the solution path 
 // 1 will be used to display the paths that are not part of the solution
 // 0 will be used to display the walls
 void print_maze(int (&matrix)[15][15]) {
@@ -97,15 +97,24 @@ void generate_decoys(int (&matrix)[15][15]) {
                     int direction = rand() % 4;
                     int length = rand() % 3 + 1;
                     for (int k = 1; k <= length; k++) {
-                        int ni = i, nj = j;
-                        if (direction == 0) ni -= k; // Up
-                        else if (direction == 1) ni += k; // Down
-                        else if (direction == 2) nj -= k; // Left
-                        else if (direction == 3) nj += k; // Right;
+                        int verticle = i, horizontal = j;
+                        if (direction == 0) {
+                            verticle -= k; // go up
+                        }
+                        else if (direction == 1){
+                            verticle += k; // go down
+                        } 
+                        else if (direction == 2) {
+                            horizontal -= k; // go left
+                        } 
+                        else if (direction == 3) {
+                            horizontal += k; // go right
+                        } 
                         //check to see if the decoy is in the maze and not the solution path
-                        if (ni > 0 && ni < 14 && nj > 0 && nj < 14 && matrix[ni][nj] == 0) {
-                            matrix[ni][nj] = 1;
-                        } else if (matrix[ni][nj] == 2) { // Avoid replacing solution path
+                        if (verticle > 0 && verticle < 14 && horizontal > 0 && horizontal < 14 && matrix[verticle][horizontal] == 0) {
+                            matrix[verticle][horizontal] = 1;
+                        }
+                        else {
                             break;
                         }
                     }
