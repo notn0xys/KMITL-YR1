@@ -49,6 +49,9 @@ QSqlDatabase& MainWindow::getDatabase() {
 }
 void MainWindow::on_AdminToggle_clicked()
 {
+    if (!adminPanel) {
+        adminPanel = new AdminPanel(this);
+    }
     this->hide();
     adminPanel->show();
 }

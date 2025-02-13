@@ -21,6 +21,12 @@ private slots:
 
     void on_updateStock_clicked();
 
+    void on_CollectionBtn_clicked();
+
+    void on_ChangeBtn_clicked();
+
+    void on_Empt_Collection_clicked();
+
 private:
     Ui::AdminPanel *ui;
     MainWindow *mainWin;

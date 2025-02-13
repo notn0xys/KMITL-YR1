@@ -19,6 +19,7 @@ AdminPanel::AdminPanel(MainWindow *parent)
 
 AdminPanel::~AdminPanel()
 {
+    this->hide();
     mainWin->showMainWindow();
     mainWin->activateWindow();
     mainWin->raise();
@@ -59,12 +60,12 @@ void AdminPanel::on_updateStock_clicked()
     QString amount = ui->Amount_Entry->text();
     int id_num = id.toInt(&ok);
     if (!ok) {
-        QMessageBox::warning(nullptr, "Warning", "Please only Enter Intergers");
+        QMessageBox::warning(this, "Warning", "Please only Enter Intergers");
         return;
     }
     int amount_num = amount.toInt(&ok);
     if (!ok) {
-        QMessageBox::warning(nullptr, "Warning", "Please only Enter Intergers");
+        QMessageBox::warning(this, "Warning", "Please only Enter Intergers");
         return;
     }
     QSqlQuery query;
@@ -77,5 +78,53 @@ void AdminPanel::on_updateStock_clicked()
     }
     mainWin->itemWidgets[id_num-1]->updateQuantity(amount_num);
     AdminWidgets[id_num - 1]->updateQuantity(amount_num);
+    query.clear();
+}
+
+
+void AdminPanel::on_CollectionBtn_clicked()
+{
+    int total_amount = 0;
+    QSqlQuery query;
+    query.exec("SELECT Bill_100 , Bill_20 ,Coin_10 ,Coin_5 ,Coin_1 FROM collectionbox WHERE id = 1;");
+    query.next();
+    int hundreds = query.value(0).toInt() * 100;
+    int twenty = query.value(1).toInt() * 20;
+    int ten = query.value(2).toInt() * 10;
+    int five = query.value(3).toInt() * 5;
+    int one = query.value(4).toInt();
+
+    total_amount = hundreds + twenty + ten + five + one;
+    ui -> CollectionLabel->setText("Amount: $" + QString::number(total_amount));
+    query.clear();
+}
+
+
+void AdminPanel::on_ChangeBtn_clicked()
+{
+    int total_amount = 0;
+    QSqlQuery query;
+    query.exec("SELECT Bill_100 , Bill_20 ,Coin_10 ,Coin_5 ,Coin_1 FROM changebox WHERE id = 1;");
+    query.next();
+    int hundreds = query.value(0).toInt() * 100;
+    int twenty = query.value(1).toInt() * 20;
+    int ten = query.value(2).toInt() * 10;
+    int five = query.value(3).toInt() * 5;
+    int one = query.value(4).toInt();
+
+    total_amount = hundreds + twenty + ten + five + one;
+    ui -> ChangeLabel->setText("Amount: $" + QString::number(total_amount));
+    query.clear();
+}
+
+
+void AdminPanel::on_Empt_Collection_clicked()
+{
+    QSqlQuery query;
+    query.prepare("UPDATE collectionbox SET Bill_100 = 0, Bill_20 = 0, Coin_10 = 0, Coin_5 = 0, Coin_1 = 0 WHERE id = 1;");
+    query.exec();
+    QMessageBox::information(this, "Success", "The collection box has been emptied.");
+    ui->CollectionLabel->setText("Amount: $0");
+    query.clear();
 }
 
