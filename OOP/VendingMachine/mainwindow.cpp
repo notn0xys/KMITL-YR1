@@ -14,11 +14,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    adminPanel = new AdminPanel(this);
     setupDatabase();
     additems();
     ui->Id_display->setText(DisplaySelected);
+    checkStockAndDisableMachine();
     ui->State->setText("Current Status: Waiting: ");
+    adminPanel = new AdminPanel(this);
+
 }
 
 MainWindow::~MainWindow()
@@ -278,6 +280,7 @@ void MainWindow::buyItem(int index)
     Amount_due = 0;
     ui->Pay->setText("Total To Pay: ");
     itemWidgets[index]->updateQuantity(newQuantity);
+    adminPanel->AdminWidgets[index]->updateQuantity(newQuantity);
     checkStockAndDisableMachine();
 }
 
