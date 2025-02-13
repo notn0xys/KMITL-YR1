@@ -768,7 +768,7 @@ private:
         CREATE TABLE IF NOT EXISTS logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         action TEXT NOT NULL,
-        doneby TEXT NOT NULL
+                                                                    
         );
         )";    
         rc = sqlite3_exec(db, createTableSQL, nullptr, nullptr, &errMsg);
