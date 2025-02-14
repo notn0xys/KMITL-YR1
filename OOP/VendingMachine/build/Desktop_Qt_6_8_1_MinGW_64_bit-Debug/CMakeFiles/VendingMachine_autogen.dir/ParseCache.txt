@@ -757,6 +757,7 @@ C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.h
  mdp:C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.h
  mdp:C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h
  mdp:C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.h
+C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/logs.h
 C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.h
  mmc:Q_OBJECT
  mdp:C:/Qt/6.8.1/mingw_64/include/QtCore/QDebug
@@ -1159,3 +1160,4 @@ C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.cpp
 C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.cpp
  uic:./ui_mainwindow.h
 C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/main.cpp
+C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/logs.cpp

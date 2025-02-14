@@ -15,6 +15,7 @@ public:
     explicit AdminPanel(MainWindow *parent = nullptr);
     ~AdminPanel();
 protected:
+    int get_amount();
     void populateItems();
 private slots:
     void on_Back_clicked();
@@ -26,6 +27,8 @@ private slots:
     void on_ChangeBtn_clicked();
 
     void on_Empt_Collection_clicked();
+
+    void on_refill100_clicked();
 
 private:
     Ui::AdminPanel *ui;

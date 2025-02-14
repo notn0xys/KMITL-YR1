@@ -593,6 +593,8 @@ VendingMachine_autogen/timestamp: \
 	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
 	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.cpp \
 	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.h \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/logs.cpp \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/logs.h \
 	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/main.cpp \
 	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.cpp \
 	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.h \

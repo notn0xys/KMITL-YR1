@@ -337,6 +337,12 @@
 			null
 		],
 		[
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/logs.h",
+			"MU",
+			"EWIEGA46WW/moc_logs.cpp",
+			null
+		],
+		[
 			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -423,6 +429,11 @@
 		],
 		[
 			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/logs.cpp",
 			"MU",
 			null
 		],

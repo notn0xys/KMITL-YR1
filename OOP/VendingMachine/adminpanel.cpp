@@ -113,7 +113,6 @@ void AdminPanel::on_ChangeBtn_clicked()
     int one = query.value(4).toInt();
 
     total_amount = hundreds + twenty + ten + five + one;
-    ui -> ChangeLabel->setText("Amount: $" + QString::number(total_amount));
     query.clear();
 }
 
@@ -126,5 +125,20 @@ void AdminPanel::on_Empt_Collection_clicked()
     QMessageBox::information(this, "Success", "The collection box has been emptied.");
     ui->CollectionLabel->setText("Amount: $0");
     query.clear();
+}
+int AdminPanel::get_amount() {
+    QString amnt = ui->Amount_Entry->text();
+    bool ok;
+    int amount = amnt.toInt(&ok);
+    if (!ok) {
+        QMessageBox::warning(this,"Error","Invalid Data Type");
+        return 0;
+    }
+    return amount;
+}
+
+void AdminPanel::on_refill100_clicked()
+{
+    int amount = get_amount();
 }
 
