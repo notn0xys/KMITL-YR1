@@ -1,5 +1,5 @@
-C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/EWIEGA46WW/moc_item.cpp: C:/Users/akina/OneDrive/Documents/VendingMachine/item.h \
-  C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
+C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/EWIEGA46WW/moc_item.cpp: C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.h \
+  C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
   C:/Qt/6.8.1/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.8.1/mingw_64/include/QtCore/q20iterator.h \
   C:/Qt/6.8.1/mingw_64/include/QtCore/q20memory.h \

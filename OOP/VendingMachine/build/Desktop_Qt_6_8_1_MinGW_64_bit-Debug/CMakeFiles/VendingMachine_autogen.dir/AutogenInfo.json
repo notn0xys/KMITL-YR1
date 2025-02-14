@@ -1,18 +1,18 @@
 {
 	"AUTOGEN_COMMAND_LINE_LENGTH_MAX" : 32000,
-	"BUILD_DIR" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen",
-	"CMAKE_BINARY_DIR" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug",
-	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug",
-	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/akina/OneDrive/Documents/VendingMachine",
+	"BUILD_DIR" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine",
 	"CMAKE_EXECUTABLE" : "C:/Qt/Tools/CMake_64/bin/cmake.exe",
 	"CMAKE_LIST_FILES" : 
 	[
-		"C:/Users/akina/OneDrive/Documents/VendingMachine/CMakeLists.txt",
-		"C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake",
-		"C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake",
+		"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/CMakeLists.txt",
+		"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake",
+		"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeSystemSpecificInitialize.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/Platform/Windows-Initialize.cmake",
-		"C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake",
+		"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeSystemSpecificInformation.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeGenericSystem.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeInitializeConfigs.cmake",
@@ -25,7 +25,7 @@
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/Compiler/CMakeCommonCompilerMacros.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/Platform/Windows-GNU-CXX.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/Platform/Windows-GNU.cmake",
-		"C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake",
+		"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeRCInformation.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/Platform/Windows-windres.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/Platform/Windows-GNU-CXX-ABI.cmake",
@@ -318,34 +318,34 @@
 		"C:/Qt/6.8.1/mingw_64/lib/cmake/Qt6Sql/Qt6SqlVersionlessAliasTargets.cmake",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/GNUInstallDirs.cmake"
 	],
-	"CMAKE_SOURCE_DIR" : "C:/Users/akina/OneDrive/Documents/VendingMachine",
+	"CMAKE_SOURCE_DIR" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine",
 	"CROSS_CONFIG" : false,
-	"DEP_FILE" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/deps",
+	"DEP_FILE" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/deps",
 	"DEP_FILE_RULE_NAME" : "VendingMachine_autogen/timestamp",
 	"HEADERS" : 
 	[
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/adminpanel.h",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.h",
 			"MU",
 			"EWIEGA46WW/moc_adminpanel.cpp",
 			null
 		],
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/item.h",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.h",
 			"MU",
 			"EWIEGA46WW/moc_item.cpp",
 			null
 		],
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/mainwindow.h",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
-	"INCLUDE_DIR" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/include",
-	"MOC_COMPILATION_FILE" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/mocs_compilation.cpp",
+	"INCLUDE_DIR" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/include",
+	"MOC_COMPILATION_FILE" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/mocs_compilation.cpp",
 	"MOC_DEFINITIONS" : 
 	[
 		"MINGW_HAS_SECURE_API=1",
@@ -403,36 +403,36 @@
 		"-c",
 		"C:/Qt/Tools/CMake_64/share/cmake-3.29/Modules/CMakeCXXCompilerABI.cpp"
 	],
-	"MOC_PREDEFS_FILE" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h",
+	"MOC_PREDEFS_FILE" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
 	"MOC_SKIP" : [],
 	"MULTI_CONFIG" : false,
-	"PARALLEL" : 14,
-	"PARSE_CACHE_FILE" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/VendingMachine_autogen.dir/ParseCache.txt",
+	"PARALLEL" : 8,
+	"PARSE_CACHE_FILE" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/VendingMachine_autogen.dir/ParseCache.txt",
 	"QT_MOC_EXECUTABLE" : "C:/Qt/6.8.1/mingw_64/bin/moc.exe",
 	"QT_UIC_EXECUTABLE" : "C:/Qt/6.8.1/mingw_64/bin/uic.exe",
 	"QT_VERSION_MAJOR" : 6,
 	"QT_VERSION_MINOR" : 8,
-	"SETTINGS_FILE" : "C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/VendingMachine_autogen.dir/AutogenUsed.txt",
+	"SETTINGS_FILE" : "C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/VendingMachine_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/adminpanel.cpp",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/item.cpp",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/main.cpp",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/main.cpp",
 			"MU",
 			null
 		],
 		[
-			"C:/Users/akina/OneDrive/Documents/VendingMachine/mainwindow.cpp",
+			"C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.cpp",
 			"MU",
 			null
 		]

@@ -1,5 +1,5 @@
-C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/akina/OneDrive/Documents/VendingMachine/mainwindow.h \
-  C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
+C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.h \
+  C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
   C:/Qt/6.8.1/mingw_64/include/QtCore/QDebug \
   C:/Qt/6.8.1/mingw_64/include/QtCore/QVector \
   C:/Qt/6.8.1/mingw_64/include/QtCore/q20functional.h \
@@ -389,5 +389,5 @@ C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-  C:/Users/akina/OneDrive/Documents/VendingMachine/adminpanel.h \
-  C:/Users/akina/OneDrive/Documents/VendingMachine/item.h
+  C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.h \
+  C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.h

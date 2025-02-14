@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <cmath>
 using namespace std;
 // 2 will be used to display the solution path 
 // 1 will be used to display the paths that are not part of the solution

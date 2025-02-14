@@ -583,19 +583,19 @@ VendingMachine_autogen/timestamp: \
 	C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/time.h \
 	C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/vadefs.h \
 	C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wchar.h \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/CMakeLists.txt \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/adminpanel.cpp \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/adminpanel.h \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/item.cpp \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/item.h \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/main.cpp \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/mainwindow.cpp \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/mainwindow.h \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/adminpanel.ui \
-	C:/Users/akina/OneDrive/Documents/VendingMachine/mainwindow.ui \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/CMakeLists.txt \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.cpp \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.h \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeCXXCompiler.cmake \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeRCCompiler.cmake \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/CMakeFiles/3.29.3/CMakeSystem.cmake \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/VendingMachine_autogen/moc_predefs.h \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.cpp \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/item.h \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/main.cpp \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.cpp \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.h \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/adminpanel.ui \
+	C:/Users/user/Documents/GitHub/KMITL-YR1/OOP/VendingMachine/mainwindow.ui \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe
