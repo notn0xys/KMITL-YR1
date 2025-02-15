@@ -216,6 +216,7 @@ void MainWindow::on_Delete_clicked()
 {
     DisplaySelected.chop(1);
     ui->Id_display->setText(DisplaySelected);
+
 }
 
 
@@ -320,30 +321,40 @@ void MainWindow::on_Buy_clicked()
     else {
         QMessageBox::warning(nullptr, "Warning", "ID not found");
     }
+    addlogs("Bought item ID " + QString::number(Selected_id + 1), "user");
+
 }
 
 
 void MainWindow::on_add100_clicked()
 {
     insertMoney(100);
+    addlogs("Inserted 100$", "user");
+
 }
 
 
 void MainWindow::on_add20_clicked()
 {
     insertMoney(20);
+    addlogs("Inserted 20$", "user");
+
 }
 
 
 void MainWindow::on_add10_clicked()
 {
     insertMoney(10);
+    addlogs("Inserted 10$", "user");
+
 }
 
 
 void MainWindow::on_add5_clicked()
 {
     insertMoney(5);
+    addlogs("Inserted 5$", "user");
+
 
 }
 void MainWindow::calculateChangeAndUpdateDatabase() {
@@ -415,6 +426,7 @@ void MainWindow::calculateChangeAndUpdateDatabase() {
 void MainWindow::on_add1_clicked()
 {
     insertMoney(1);
+    addlogs("Inserted 1$", "user");
 }
 void MainWindow::checkStockAndDisableMachine()
 {
@@ -490,5 +502,12 @@ void MainWindow::enableMachine()
     ui->add10->setEnabled(true);
     ui->add20->setEnabled(true);
     ui->add100->setEnabled(true);
+}
+void MainWindow::addlogs(QString action, QString doneby) {
+    QSqlQuery query;
+    query.prepare("INSERT INTO logs (action, doneby) VALUES (:action, :doneby);");
+    query.bindValue(":action",action);
+    query.bindValue(":doneby",doneby);
+    query.exec();
 }
 

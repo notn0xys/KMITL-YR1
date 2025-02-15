@@ -7,6 +7,7 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QVBoxLayout>
+#include "logs.h"
 AdminPanel::AdminPanel(MainWindow *parent)
     : QMainWindow(parent)
     , ui(new Ui::AdminPanel)
@@ -79,6 +80,8 @@ void AdminPanel::on_updateStock_clicked()
     mainWin->itemWidgets[id_num-1]->updateQuantity(amount_num);
     AdminWidgets[id_num - 1]->updateQuantity(amount_num);
     query.clear();
+    mainWin->addlogs("Updated Stock for ID " + QString::number(id_num), "Admin");
+
 }
 
 
@@ -97,6 +100,8 @@ void AdminPanel::on_CollectionBtn_clicked()
     total_amount = hundreds + twenty + ten + five + one;
     ui -> CollectionLabel->setText("Amount: $" + QString::number(total_amount));
     query.clear();
+    mainWin->addlogs("Checked Collection Box", "Admin");
+
 }
 
 
@@ -106,14 +111,21 @@ void AdminPanel::on_ChangeBtn_clicked()
     QSqlQuery query;
     query.exec("SELECT Bill_100 , Bill_20 ,Coin_10 ,Coin_5 ,Coin_1 FROM changebox WHERE id = 1;");
     query.next();
-    int hundreds = query.value(0).toInt() * 100;
-    int twenty = query.value(1).toInt() * 20;
-    int ten = query.value(2).toInt() * 10;
-    int five = query.value(3).toInt() * 5;
+    int hundreds = query.value(0).toInt();
+    int twenty = query.value(1).toInt();
+    int ten = query.value(2).toInt();
+    int five = query.value(3).toInt();
     int one = query.value(4).toInt();
 
-    total_amount = hundreds + twenty + ten + five + one;
+    ui->change1->setText(QString::number(one));
+    ui->change5->setText(QString::number(five));
+    ui->change10->setText(QString::number(ten));
+    ui->change20->setText(QString::number(twenty));
+    ui->change100->setText(QString::number(hundreds));
     query.clear();
+    mainWin->addlogs("Checked Change Box", "Admin");
+
+
 }
 
 
@@ -125,13 +137,15 @@ void AdminPanel::on_Empt_Collection_clicked()
     QMessageBox::information(this, "Success", "The collection box has been emptied.");
     ui->CollectionLabel->setText("Amount: $0");
     query.clear();
+    mainWin->addlogs("Emptied Collection Box", "Admin");
+
 }
 int AdminPanel::get_amount() {
-    QString amnt = ui->Amount_Entry->text();
+    QString amnt = ui->changeEntry->text().trimmed();
     bool ok;
     int amount = amnt.toInt(&ok);
     if (!ok) {
-        QMessageBox::warning(this,"Error","Invalid Data Type");
+        QMessageBox::warning(this, "Error", "Invalid Data Type");
         return 0;
     }
     return amount;
@@ -140,5 +154,105 @@ int AdminPanel::get_amount() {
 void AdminPanel::on_refill100_clicked()
 {
     int amount = get_amount();
+    QSqlQuery query;
+    query.exec("SELECT Bill_100 FROM changebox WHERE id = 1;");
+    query.next();
+    int original = query.value(0).toInt();
+    original += amount;
+    query.prepare("UPDATE changebox SET Bill_100 = :bill WHERE id = 1;");
+    query.bindValue(":bill",original);
+    query.exec();
+    ui->change100->setText(QString::number(original));
+    mainWin->addlogs("Refilled 100$ bills in the changebox", "Admin");
+
+}
+
+
+void AdminPanel::on_refill20_clicked()
+{
+    int amount = get_amount();
+    QSqlQuery query;
+    query.exec("SELECT Bill_20 FROM changebox WHERE id = 1;");
+    query.next();
+    int original = query.value(0).toInt();
+    original += amount;
+    query.prepare("UPDATE changebox SET Bill_20 = :bill WHERE id = 1;");
+    query.bindValue(":bill",original);
+    query.exec();
+    ui->change20->setText(QString::number(original));
+    mainWin->addlogs("Refilled 20$ bills in the changebox", "Admin");
+
+}
+
+
+void AdminPanel::on_refill10_clicked()
+{
+    int amount = get_amount();
+    QSqlQuery query;
+    query.exec("SELECT Coin_10 FROM changebox WHERE id = 1;");
+    query.next();
+    int original = query.value(0).toInt();
+    original += amount;
+    query.prepare("UPDATE changebox SET Coin_10 = :bill WHERE id = 1;");
+    query.bindValue(":bill",original);
+    query.exec();
+    ui->change10->setText(QString::number(original));
+    mainWin->addlogs("Refilled 10$ coins in the changebox", "Admin");
+
+}
+
+
+void AdminPanel::on_refill5_clicked()
+{
+    int amount = get_amount();
+    QSqlQuery query;
+    query.exec("SELECT Coin_5 FROM changebox WHERE id = 1;");
+    query.next();
+    int original = query.value(0).toInt();
+    original += amount;
+    query.prepare("UPDATE changebox SET Coin_5 = :bill WHERE id = 1;");
+    query.bindValue(":bill",original);
+    query.exec();
+    ui->change5->setText(QString::number(original));
+    mainWin->addlogs("Refilled 5$ coins in the changebox", "Admin");
+
+}
+
+
+void AdminPanel::on_refill1_clicked()
+{
+    int amount = get_amount();
+    QSqlQuery query;
+    query.exec("SELECT Coin_1 FROM changebox WHERE id = 1;");
+    query.next();
+    int original = query.value(0).toInt();
+    original += amount;
+    query.prepare("UPDATE changebox SET Coin_1 = :bill WHERE id = 1;");
+    query.bindValue(":bill",original);
+    query.exec();
+    ui->change1->setText(QString::number(original));
+    mainWin->addlogs("Refilled 1$ bills in the changebox", "Admin");
+
+}
+void AdminPanel::loadlogs() {
+    QWidget *container = new QWidget;
+    QVBoxLayout *layout = new QVBoxLayout(container);
+    container->setLayout(layout);
+    QSqlQuery query;
+    query.exec("SELECT action, doneby FROM logs ORDER BY id DESC");
+    while (query.next()) {
+        QString action = query.value(0).toString();
+        QString doneby = query.value(1).toString();
+
+        Logs *logEntry = new Logs(action, doneby);
+        layout->addWidget(logEntry);
+    }
+    ui->LogsArea->setWidget(container);
+    ui->LogsArea->setWidgetResizable(true);
+}
+//Logs btn forgot to rename
+void AdminPanel::on_pushButton_clicked()
+{
+    loadlogs();
 }
 

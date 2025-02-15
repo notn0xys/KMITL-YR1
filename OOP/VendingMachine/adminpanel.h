@@ -17,6 +17,7 @@ public:
 protected:
     int get_amount();
     void populateItems();
+    void loadlogs();
 private slots:
     void on_Back_clicked();
 
@@ -29,6 +30,16 @@ private slots:
     void on_Empt_Collection_clicked();
 
     void on_refill100_clicked();
+
+    void on_refill20_clicked();
+
+    void on_refill10_clicked();
+
+    void on_refill5_clicked();
+
+    void on_refill1_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::AdminPanel *ui;

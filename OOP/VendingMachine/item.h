@@ -25,4 +25,4 @@ private:
     QLabel *quantityLabel;
 };
 
-#endif // ITEMWIDGET_H
+#endif // ITEM_H

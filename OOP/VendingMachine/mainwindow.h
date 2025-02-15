@@ -20,6 +20,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    void addlogs(QString action, QString doneby);
     QSqlDatabase& getDatabase();
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();

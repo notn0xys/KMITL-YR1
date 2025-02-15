@@ -56,14 +56,15 @@ public:
     QLabel *label_8;
     QLabel *label_9;
     QLabel *label_10;
-    QLabel *label_11;
-    QLabel *label_12;
-    QLabel *label_13;
-    QLabel *label_14;
-    QLabel *label_15;
+    QLabel *change100;
+    QLabel *change20;
+    QLabel *change10;
+    QLabel *change5;
+    QLabel *change1;
     QLineEdit *changeEntry;
     QLabel *label_16;
     QLabel *label_17;
+    QPushButton *pushButton;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *AdminPanel)
@@ -144,7 +145,7 @@ public:
         refill10->setGeometry(QRect(200, 480, 111, 24));
         Empt_Collection = new QPushButton(frame);
         Empt_Collection->setObjectName("Empt_Collection");
-        Empt_Collection->setGeometry(QRect(510, 640, 181, 31));
+        Empt_Collection->setGeometry(QRect(560, 640, 131, 31));
         frame_2 = new QFrame(frame);
         frame_2->setObjectName("frame_2");
         frame_2->setGeometry(QRect(370, 110, 311, 281));
@@ -171,21 +172,21 @@ public:
         label_10 = new QLabel(frame_2);
         label_10->setObjectName("label_10");
         label_10->setGeometry(QRect(80, 0, 171, 41));
-        label_11 = new QLabel(frame_2);
-        label_11->setObjectName("label_11");
-        label_11->setGeometry(QRect(90, 60, 63, 20));
-        label_12 = new QLabel(frame_2);
-        label_12->setObjectName("label_12");
-        label_12->setGeometry(QRect(90, 100, 63, 20));
-        label_13 = new QLabel(frame_2);
-        label_13->setObjectName("label_13");
-        label_13->setGeometry(QRect(90, 140, 63, 20));
-        label_14 = new QLabel(frame_2);
-        label_14->setObjectName("label_14");
-        label_14->setGeometry(QRect(90, 180, 63, 20));
-        label_15 = new QLabel(frame_2);
-        label_15->setObjectName("label_15");
-        label_15->setGeometry(QRect(90, 220, 63, 20));
+        change100 = new QLabel(frame_2);
+        change100->setObjectName("change100");
+        change100->setGeometry(QRect(80, 60, 63, 20));
+        change20 = new QLabel(frame_2);
+        change20->setObjectName("change20");
+        change20->setGeometry(QRect(80, 90, 63, 20));
+        change10 = new QLabel(frame_2);
+        change10->setObjectName("change10");
+        change10->setGeometry(QRect(80, 140, 63, 20));
+        change5 = new QLabel(frame_2);
+        change5->setObjectName("change5");
+        change5->setGeometry(QRect(80, 180, 63, 20));
+        change1 = new QLabel(frame_2);
+        change1->setObjectName("change1");
+        change1->setGeometry(QRect(80, 220, 63, 20));
         changeEntry = new QLineEdit(frame);
         changeEntry->setObjectName("changeEntry");
         changeEntry->setGeometry(QRect(200, 350, 111, 28));
@@ -195,6 +196,9 @@ public:
         label_17 = new QLabel(frame);
         label_17->setObjectName("label_17");
         label_17->setGeometry(QRect(200, 270, 121, 20));
+        pushButton = new QPushButton(frame);
+        pushButton->setObjectName("pushButton");
+        pushButton->setGeometry(QRect(710, 640, 141, 31));
         AdminPanel->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(AdminPanel);
         statusbar->setObjectName("statusbar");
@@ -211,7 +215,7 @@ public:
         label->setText(QCoreApplication::translate("AdminPanel", "Admin Panel", nullptr));
         Back->setText(QCoreApplication::translate("AdminPanel", "Back", nullptr));
         label_2->setText(QCoreApplication::translate("AdminPanel", "Logs", nullptr));
-        restockText->setText(QCoreApplication::translate("AdminPanel", "Restock Iems: ", nullptr));
+        restockText->setText(QCoreApplication::translate("AdminPanel", "Restock Items: ", nullptr));
         label_4->setText(QCoreApplication::translate("AdminPanel", "Enter ID: ", nullptr));
         label_5->setText(QCoreApplication::translate("AdminPanel", "Enter Amount of stock", nullptr));
         updateStock->setText(QCoreApplication::translate("AdminPanel", "Update", nullptr));
@@ -230,13 +234,14 @@ public:
         label_8->setText(QCoreApplication::translate("AdminPanel", "$5 :", nullptr));
         label_9->setText(QCoreApplication::translate("AdminPanel", "$1 :", nullptr));
         label_10->setText(QCoreApplication::translate("AdminPanel", "Change Remaining", nullptr));
-        label_11->setText(QCoreApplication::translate("AdminPanel", "TextLabel", nullptr));
-        label_12->setText(QCoreApplication::translate("AdminPanel", "TextLabel", nullptr));
-        label_13->setText(QCoreApplication::translate("AdminPanel", "TextLabel", nullptr));
-        label_14->setText(QCoreApplication::translate("AdminPanel", "TextLabel", nullptr));
-        label_15->setText(QCoreApplication::translate("AdminPanel", "TextLabel", nullptr));
+        change100->setText(QString());
+        change20->setText(QString());
+        change10->setText(QString());
+        change5->setText(QString());
+        change1->setText(QString());
         label_16->setText(QCoreApplication::translate("AdminPanel", "Enter Amount", nullptr));
         label_17->setText(QCoreApplication::translate("AdminPanel", "Restock Change", nullptr));
+        pushButton->setText(QCoreApplication::translate("AdminPanel", "Get Logs", nullptr));
     } // retranslateUi
 
 };

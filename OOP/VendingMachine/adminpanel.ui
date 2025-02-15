@@ -124,7 +124,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Restock Iems: </string>
+      <string>Restock Items: </string>
      </property>
     </widget>
     <widget class="QLineEdit" name="ID_Entry">
@@ -280,9 +280,9 @@
     <widget class="QPushButton" name="Empt_Collection">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>560</x>
        <y>640</y>
-       <width>181</width>
+       <width>131</width>
        <height>31</height>
       </rect>
      </property>
@@ -396,69 +396,69 @@
        <string>Change Remaining</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_11">
+     <widget class="QLabel" name="change100">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>80</x>
         <y>60</y>
         <width>63</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label_12">
+     <widget class="QLabel" name="change20">
       <property name="geometry">
        <rect>
-        <x>90</x>
-        <y>100</y>
+        <x>80</x>
+        <y>90</y>
         <width>63</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label_13">
+     <widget class="QLabel" name="change10">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>80</x>
         <y>140</y>
         <width>63</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label_14">
+     <widget class="QLabel" name="change5">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>80</x>
         <y>180</y>
         <width>63</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label_15">
+     <widget class="QLabel" name="change1">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>80</x>
         <y>220</y>
         <width>63</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
     </widget>
@@ -496,6 +496,19 @@
      </property>
      <property name="text">
       <string>Restock Change</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>640</y>
+       <width>141</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Get Logs</string>
      </property>
     </widget>
    </widget>
