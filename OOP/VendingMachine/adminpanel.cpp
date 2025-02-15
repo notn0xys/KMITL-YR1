@@ -81,6 +81,7 @@ void AdminPanel::on_updateStock_clicked()
     AdminWidgets[id_num - 1]->updateQuantity(amount_num);
     query.clear();
     mainWin->addlogs("Updated Stock for ID " + QString::number(id_num), "Admin");
+    mainWin->checkStockAndDisableMachine();
 
 }
 
@@ -138,6 +139,8 @@ void AdminPanel::on_Empt_Collection_clicked()
     ui->CollectionLabel->setText("Amount: $0");
     query.clear();
     mainWin->addlogs("Emptied Collection Box", "Admin");
+    mainWin->checkCollectionboxAndDisableMachine();
+
 
 }
 int AdminPanel::get_amount() {
@@ -164,6 +167,7 @@ void AdminPanel::on_refill100_clicked()
     query.exec();
     ui->change100->setText(QString::number(original));
     mainWin->addlogs("Refilled 100$ bills in the changebox", "Admin");
+    mainWin->checkChangeboxAndDisableMachine();
 
 }
 
@@ -181,6 +185,8 @@ void AdminPanel::on_refill20_clicked()
     query.exec();
     ui->change20->setText(QString::number(original));
     mainWin->addlogs("Refilled 20$ bills in the changebox", "Admin");
+    mainWin->checkChangeboxAndDisableMachine();
+
 
 }
 
@@ -198,6 +204,8 @@ void AdminPanel::on_refill10_clicked()
     query.exec();
     ui->change10->setText(QString::number(original));
     mainWin->addlogs("Refilled 10$ coins in the changebox", "Admin");
+    mainWin->checkChangeboxAndDisableMachine();
+
 
 }
 
@@ -215,6 +223,8 @@ void AdminPanel::on_refill5_clicked()
     query.exec();
     ui->change5->setText(QString::number(original));
     mainWin->addlogs("Refilled 5$ coins in the changebox", "Admin");
+    mainWin->checkChangeboxAndDisableMachine();
+
 
 }
 
@@ -232,6 +242,8 @@ void AdminPanel::on_refill1_clicked()
     query.exec();
     ui->change1->setText(QString::number(original));
     mainWin->addlogs("Refilled 1$ bills in the changebox", "Admin");
+    mainWin->checkChangeboxAndDisableMachine();
+
 
 }
 void AdminPanel::loadlogs() {

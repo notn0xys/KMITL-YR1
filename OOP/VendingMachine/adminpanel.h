@@ -18,6 +18,7 @@ protected:
     int get_amount();
     void populateItems();
     void loadlogs();
+
 private slots:
     void on_Back_clicked();
 

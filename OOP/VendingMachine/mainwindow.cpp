@@ -18,9 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
     setupDatabase();
     additems();
     ui->Id_display->setText(DisplaySelected);
-    checkStockAndDisableMachine();
     ui->State->setText("Current Status: Waiting: ");
     adminPanel = new AdminPanel(this);
+    checkStockAndDisableMachine();
+    checkChangeboxAndDisableMachine();
+    checkCollectionboxAndDisableMachine();
 
 }
 
@@ -311,6 +313,8 @@ void MainWindow::insertMoney(int amount)
     }
 
     ui->Amount->setText("Inserted: " + QString::number(insertedMoney));
+    checkCollectionboxAndDisableMachine();
+
 }
 
 void MainWindow::on_Buy_clicked()
@@ -454,54 +458,74 @@ void MainWindow::checkStockAndDisableMachine()
     }
 
     if (outOfStockCount > totalItems / 2) {
-        disableMachine();
-    } else {
-        enableMachine();
+        outofstock = true;
+        qDebug() << "More than items out of stock";
     }
+    else {
+        outofstock = false;
+    }
+    checkAndDisable();
+
 }
 void MainWindow::disableMachine()
 {
-    ui->Buy->setEnabled(false);
-    ui->Delete->setEnabled(false);
-    ui->Enter->setEnabled(false);
-    ui->btn0->setEnabled(false);
-    ui->btn1->setEnabled(false);
-    ui->btn2->setEnabled(false);
-    ui->btn3->setEnabled(false);
-    ui->btn4->setEnabled(false);
-    ui->btn5->setEnabled(false);
-    ui->btn6->setEnabled(false);
-    ui->btn7->setEnabled(false);
-    ui->btn8->setEnabled(false);
-    ui->btn9->setEnabled(false);
-    ui->add1->setEnabled(false);
-    ui->add5->setEnabled(false);
-    ui->add10->setEnabled(false);
-    ui->add20->setEnabled(false);
-    ui->add100->setEnabled(false);
+    if (!disabled) {
+        ui->Buy->setEnabled(false);
+        ui->Delete->setEnabled(false);
+        ui->Enter->setEnabled(false);
+        ui->btn0->setEnabled(false);
+        ui->btn1->setEnabled(false);
+        ui->btn2->setEnabled(false);
+        ui->btn3->setEnabled(false);
+        ui->btn4->setEnabled(false);
+        ui->btn5->setEnabled(false);
+        ui->btn6->setEnabled(false);
+        ui->btn7->setEnabled(false);
+        ui->btn8->setEnabled(false);
+        ui->btn9->setEnabled(false);
+        ui->add1->setEnabled(false);
+        ui->add5->setEnabled(false);
+        ui->add10->setEnabled(false);
+        ui->add20->setEnabled(false);
+        ui->add100->setEnabled(false);
+        qApp->processEvents();
 
-    QMessageBox::warning(nullptr, "Machine Unusable", "The machine is currently unusable because more than half of the items are out of stock.");
+        qDebug() << "Machine Disabled";
+        disabled = true;
+    }
+    else {
+        return;
+    }
 }
 void MainWindow::enableMachine()
 {
-    ui->Buy->setEnabled(true);
-    ui->Delete->setEnabled(true);
-    ui->Enter->setEnabled(true);
-    ui->btn0->setEnabled(true);
-    ui->btn1->setEnabled(true);
-    ui->btn2->setEnabled(true);
-    ui->btn3->setEnabled(true);
-    ui->btn4->setEnabled(true);
-    ui->btn5->setEnabled(true);
-    ui->btn6->setEnabled(true);
-    ui->btn7->setEnabled(true);
-    ui->btn8->setEnabled(true);
-    ui->btn9->setEnabled(true);
-    ui->add1->setEnabled(true);
-    ui->add5->setEnabled(true);
-    ui->add10->setEnabled(true);
-    ui->add20->setEnabled(true);
-    ui->add100->setEnabled(true);
+    if (disabled) {
+        ui->Buy->setEnabled(true);
+        ui->Delete->setEnabled(true);
+        ui->Enter->setEnabled(true);
+        ui->btn0->setEnabled(true);
+        ui->btn1->setEnabled(true);
+        ui->btn2->setEnabled(true);
+        ui->btn3->setEnabled(true);
+        ui->btn4->setEnabled(true);
+        ui->btn5->setEnabled(true);
+        ui->btn6->setEnabled(true);
+        ui->btn7->setEnabled(true);
+        ui->btn8->setEnabled(true);
+        ui->btn9->setEnabled(true);
+        ui->add1->setEnabled(true);
+        ui->add5->setEnabled(true);
+        ui->add10->setEnabled(true);
+        ui->add20->setEnabled(true);
+        ui->add100->setEnabled(true);
+        qDebug() << "Machine Enabled";
+        qApp->processEvents();
+
+        disabled = false;
+    }
+    else {
+        return;
+    }
 }
 void MainWindow::addlogs(QString action, QString doneby) {
     QSqlQuery query;
@@ -510,4 +534,71 @@ void MainWindow::addlogs(QString action, QString doneby) {
     query.bindValue(":doneby",doneby);
     query.exec();
 }
+void MainWindow::checkChangeboxAndDisableMachine()
+{
+    QSqlQuery query;
+    query.prepare("SELECT Bill_100, Bill_20, Coin_10, Coin_5, Coin_1 FROM changebox WHERE id = 1");
+
+    if (!query.exec() || !query.next()) {
+        qDebug() << "Error retrieving changebox data:" << query.lastError().text();
+        return;
+    }
+
+    int bills100 = query.value(0).toInt();
+    int bills20 = query.value(1).toInt();
+    int coins10 = query.value(2).toInt();
+    int coins5 = query.value(3).toInt();
+    int coins1 = query.value(4).toInt();
+
+    // If any bill/coin reaches 0, disable the machine
+    if (bills100 == 0 || bills20 == 0 || coins10 == 0 || coins5 == 0 || coins1 == 0)
+    {
+        changeEmpty = true;
+        qDebug() << "Change Box empty";
+    }
+    else {
+        changeEmpty = false;
+    }
+    checkAndDisable();
+}
+
+void MainWindow::checkCollectionboxAndDisableMachine()
+{
+    QSqlQuery query;
+    query.prepare("SELECT Bill_100, Bill_20, Coin_10, Coin_5, Coin_1, Max_Capacity FROM collectionbox WHERE id = 1");
+
+    if (!query.exec() || !query.next()) {
+        qDebug() << "Error retrieving collectionbox data:" << query.lastError().text();
+        return;
+    }
+
+    int bills100 = query.value(0).toInt();
+    int bills20 = query.value(1).toInt();
+    int coins10 = query.value(2).toInt();
+    int coins5 = query.value(3).toInt();
+    int coins1 = query.value(4).toInt();
+    int maxCapacity = query.value(5).toInt(); // Maximum capacity limit
+
+    // If any bill/coin reaches max capacity, disable the machine
+    if (bills100 >= maxCapacity || bills20 >= maxCapacity ||
+        coins10 >= maxCapacity || coins5 >= maxCapacity || coins1 >= maxCapacity)
+    {
+        collectionEmpty = true;
+        qDebug() << "Collection Box full";
+    }
+    else {
+        collectionEmpty = false;
+    }
+    checkAndDisable();
+
+}
+void MainWindow::checkAndDisable() {
+    if (collectionEmpty || changeEmpty || outofstock) {
+        disableMachine();
+    }
+    else {
+        enableMachine();
+    }
+}
+
 

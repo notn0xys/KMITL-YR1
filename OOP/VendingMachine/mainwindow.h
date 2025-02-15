@@ -28,6 +28,11 @@ public:
     void buyItem(int index);
     QVector<Item*> itemWidgets;
     void insertMoney(int amount);
+    void checkChangeboxAndDisableMachine();
+    void checkCollectionboxAndDisableMachine();
+    void checkAndDisable();
+    void checkStockAndDisableMachine();
+
 
 
 private slots:
@@ -69,11 +74,11 @@ private slots:
 
     void on_add1_clicked();
 protected:
-    void checkStockAndDisableMachine();
     void disableMachine();
     void enableMachine();
     void calculateChangeAndUpdateDatabase();
 private:
+    bool disabled = false;
     QString DisplaySelected = "";
     int Selected_id;
     int Return_amount;
@@ -84,5 +89,8 @@ private:
     void setupDatabase();
     Ui::MainWindow *ui;
     AdminPanel *adminPanel = nullptr;
+    bool changeEmpty = false;
+    bool collectionEmpty = false;
+    bool outofstock = false;
 };
 #endif // MAINWINDOW_H
