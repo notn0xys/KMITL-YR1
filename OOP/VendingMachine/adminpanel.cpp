@@ -268,3 +268,36 @@ void AdminPanel::on_pushButton_clicked()
     loadlogs();
 }
 
+void AdminPanel::addItemToAdminPanel(const QString &name, int stock, int price)
+{
+    // Create a new item widget for the Admin Panel
+    Item *adminItem = new Item(name, price, stock);
+    AdminWidgets.append(adminItem);
+
+    // Get the layout from `ItemArea` and add the new item
+    QVBoxLayout *adminLayout = qobject_cast<QVBoxLayout*>(ui->ItemArea->widget()->layout());
+    if (adminLayout) {
+        adminLayout->addWidget(adminItem);
+    }
+
+    qDebug() << "Item added to Admin Panel:" << name;
+}
+void AdminPanel::on_AddItemButton_clicked()
+{
+    bool ok;
+    QString name = ui->ItemNameEntry->text();
+    int stock = ui->ItemStockEntry->text().toInt(&ok);
+    int price = ui->ItemPriceEntry->text().toInt(&ok);
+    if (!ok) {
+        return;
+    }
+
+    if (name.isEmpty() || stock <= 0 || price <= 0) {
+        QMessageBox::warning(this, "Invalid Input", "Please enter valid item details.");
+        return;
+    }
+
+    mainWin->addItem(name, stock, price);
+}
+
+

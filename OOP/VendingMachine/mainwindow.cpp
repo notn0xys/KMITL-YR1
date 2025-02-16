@@ -120,8 +120,8 @@ void MainWindow::additems() {
     ui->ItemDisplay->setWidgetResizable(true);
     QSqlQuery query;
     query.exec("SELECT id, name, stock, price FROM stock_67011177;");
-    int row = 0;
-    int col = 0;
+    row = 0;
+    column = 0;
     const int per = 3;
     while (query.next()) {
         QString id = query.value(0).toString();
@@ -130,11 +130,11 @@ void MainWindow::additems() {
         int price = query.value(3).toInt();
         int stock = query.value(2).toInt();
         Item *item = new Item(Names,price,stock);
-        layout->addWidget(item, row, col);
+        layout->addWidget(item, row, column);
         itemWidgets.append(item);
-        col++;
-        if (col >= per) {
-            col = 0;
+        column++;
+        if (column >= per) {
+            column = 0;
             row++;
         }
     }
@@ -579,7 +579,6 @@ void MainWindow::checkCollectionboxAndDisableMachine()
     int coins1 = query.value(4).toInt();
     int maxCapacity = query.value(5).toInt(); // Maximum capacity limit
 
-    // If any bill/coin reaches max capacity, disable the machine
     if (bills100 >= maxCapacity || bills20 >= maxCapacity ||
         coins10 >= maxCapacity || coins5 >= maxCapacity || coins1 >= maxCapacity)
     {
@@ -599,6 +598,50 @@ void MainWindow::checkAndDisable() {
     else {
         enableMachine();
     }
+}
+void MainWindow::addItem(const QString &name, int stock, int price)
+{
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO stock_67011177 (name, stock, price) VALUES (:name, :stock, :price)");
+    query.bindValue(":name", name);
+    query.bindValue(":stock", stock);
+    query.bindValue(":price", price);
+
+    if (!query.exec()) {
+        qDebug() << "Error adding item to database:" << query.lastError().text();
+        QMessageBox::warning(this, "Error", "Failed to add item to database.");
+        return;
+    }
+
+    int newItemId = query.lastInsertId().toInt();
+
+    QString displayName = QString::number(newItemId) + " " + name;
+    Item *newItem = new Item(displayName, price, stock);
+    itemWidgets.append(newItem);
+    const int per  = 3;
+    // Add to vending machine UI
+    QGridLayout *layout = qobject_cast<QGridLayout*>(ui->ItemDisplay->widget()->layout());
+    if (layout) {
+        layout->addWidget(newItem, row, column % 3);
+        column++;
+        if (column >= per) {
+            column = 0;
+            row++;
+        }
+    }
+
+    // Create a new item for the Admin Panel
+    Item *adminItem = new Item(name, price, stock);
+    adminPanel->AdminWidgets.append(adminItem);
+
+    if (adminPanel) {
+        adminPanel->addItemToAdminPanel(name, stock, price);
+    }
+
+    qDebug() << "Item added successfully:" << name;
+
+    addlogs("Added new item: " + name, "Admin"); // Log the addition
 }
 
 

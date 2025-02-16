@@ -11,6 +11,7 @@ class AdminPanel : public QMainWindow
     Q_OBJECT
 
 public:
+    void addItemToAdminPanel(const QString &name, int stock, int price);
     QVector<Item*> AdminWidgets;
     explicit AdminPanel(MainWindow *parent = nullptr);
     ~AdminPanel();
@@ -41,6 +42,8 @@ private slots:
     void on_refill1_clicked();
 
     void on_pushButton_clicked();
+
+    void on_AddItemButton_clicked();
 
 private:
     Ui::AdminPanel *ui;

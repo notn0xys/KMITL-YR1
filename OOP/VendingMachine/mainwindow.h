@@ -32,7 +32,9 @@ public:
     void checkCollectionboxAndDisableMachine();
     void checkAndDisable();
     void checkStockAndDisableMachine();
-
+    void addItem(const QString &name, int stock, int price);
+    int row;
+    int column;
 
 
 private slots:

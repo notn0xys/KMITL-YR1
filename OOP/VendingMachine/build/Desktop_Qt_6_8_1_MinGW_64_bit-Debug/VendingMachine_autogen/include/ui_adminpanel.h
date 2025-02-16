@@ -65,6 +65,15 @@ public:
     QLabel *label_16;
     QLabel *label_17;
     QPushButton *pushButton;
+    QFrame *frame_3;
+    QLabel *label_11;
+    QLineEdit *ItemNameEntry;
+    QLineEdit *ItemStockEntry;
+    QLineEdit *ItemPriceEntry;
+    QPushButton *AddItemButton;
+    QLabel *label_12;
+    QLabel *label_13;
+    QLabel *label_14;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *AdminPanel)
@@ -199,6 +208,35 @@ public:
         pushButton = new QPushButton(frame);
         pushButton->setObjectName("pushButton");
         pushButton->setGeometry(QRect(710, 640, 141, 31));
+        frame_3 = new QFrame(frame);
+        frame_3->setObjectName("frame_3");
+        frame_3->setGeometry(QRect(370, 400, 311, 231));
+        frame_3->setFrameShape(QFrame::Shape::StyledPanel);
+        frame_3->setFrameShadow(QFrame::Shadow::Raised);
+        label_11 = new QLabel(frame_3);
+        label_11->setObjectName("label_11");
+        label_11->setGeometry(QRect(110, 10, 49, 16));
+        ItemNameEntry = new QLineEdit(frame_3);
+        ItemNameEntry->setObjectName("ItemNameEntry");
+        ItemNameEntry->setGeometry(QRect(60, 50, 113, 24));
+        ItemStockEntry = new QLineEdit(frame_3);
+        ItemStockEntry->setObjectName("ItemStockEntry");
+        ItemStockEntry->setGeometry(QRect(60, 90, 113, 24));
+        ItemPriceEntry = new QLineEdit(frame_3);
+        ItemPriceEntry->setObjectName("ItemPriceEntry");
+        ItemPriceEntry->setGeometry(QRect(60, 130, 113, 24));
+        AddItemButton = new QPushButton(frame_3);
+        AddItemButton->setObjectName("AddItemButton");
+        AddItemButton->setGeometry(QRect(220, 190, 81, 31));
+        label_12 = new QLabel(frame_3);
+        label_12->setObjectName("label_12");
+        label_12->setGeometry(QRect(10, 50, 49, 16));
+        label_13 = new QLabel(frame_3);
+        label_13->setObjectName("label_13");
+        label_13->setGeometry(QRect(10, 90, 49, 16));
+        label_14 = new QLabel(frame_3);
+        label_14->setObjectName("label_14");
+        label_14->setGeometry(QRect(10, 130, 49, 16));
         AdminPanel->setCentralWidget(centralwidget);
         statusbar = new QStatusBar(AdminPanel);
         statusbar->setObjectName("statusbar");
@@ -242,6 +280,11 @@ public:
         label_16->setText(QCoreApplication::translate("AdminPanel", "Enter Amount", nullptr));
         label_17->setText(QCoreApplication::translate("AdminPanel", "Restock Change", nullptr));
         pushButton->setText(QCoreApplication::translate("AdminPanel", "Get Logs", nullptr));
+        label_11->setText(QCoreApplication::translate("AdminPanel", "Add Items", nullptr));
+        AddItemButton->setText(QCoreApplication::translate("AdminPanel", "Add Item", nullptr));
+        label_12->setText(QCoreApplication::translate("AdminPanel", "Name:", nullptr));
+        label_13->setText(QCoreApplication::translate("AdminPanel", "Stock: ", nullptr));
+        label_14->setText(QCoreApplication::translate("AdminPanel", "Price: ", nullptr));
     } // retranslateUi
 
 };
