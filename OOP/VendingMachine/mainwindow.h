@@ -35,6 +35,7 @@ public:
     void addItem(const QString &name, int stock, int price);
     int row;
     int column;
+    int default_stock = 20;
 
 
 private slots:

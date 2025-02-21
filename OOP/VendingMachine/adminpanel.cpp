@@ -286,10 +286,20 @@ void AdminPanel::on_AddItemButton_clicked()
 {
     bool ok;
     QString name = ui->ItemNameEntry->text();
-    int stock = ui->ItemStockEntry->text().toInt(&ok);
     int price = ui->ItemPriceEntry->text().toInt(&ok);
     if (!ok) {
         return;
+    }
+    int stock;
+    bool okStock;
+    if (ui->UseDefaultStockCheckBox->isChecked()) {
+        stock = mainWin->default_stock;
+    } else {
+        stock = ui->ItemStockEntry->text().toInt(&okStock);
+        if (!okStock) {
+            QMessageBox::warning(this, "Invalid Input", "Please enter a valid stock quantity.");
+            return;
+        }
     }
 
     if (name.isEmpty() || stock <= 0 || price <= 0) {
@@ -300,4 +310,23 @@ void AdminPanel::on_AddItemButton_clicked()
     mainWin->addItem(name, stock, price);
 }
 
+
+
+void AdminPanel::on_pushButton_2_clicked()
+{
+    ui->DefaultStock->setText(QString::number(mainWin->default_stock));
+}
+
+
+void AdminPanel::on_UpdateDefaultStock_clicked()
+{
+    bool ok;
+    QString amounts = ui->NewStockEntry->text();
+    int amount = amounts.toInt(&ok);
+    if (!ok) {
+        QMessageBox::warning(this, "Invalid Input", "Please enter valid item details.");
+        return;
+    }
+    mainWin->default_stock = amount;
+}
 

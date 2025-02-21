@@ -45,6 +45,10 @@ private slots:
 
     void on_AddItemButton_clicked();
 
+    void on_pushButton_2_clicked();
+
+    void on_UpdateDefaultStock_clicked();
+
 private:
     Ui::AdminPanel *ui;
     MainWindow *mainWin;

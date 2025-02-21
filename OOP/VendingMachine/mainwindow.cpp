@@ -224,8 +224,13 @@ void MainWindow::on_Delete_clicked()
 
 void MainWindow::on_Enter_clicked()
 {
-    int selected_id = DisplaySelected.toInt();
-    if (selected_id > itemWidgets.size()) {
+    bool ok;
+    int selected_id = DisplaySelected.toInt(&ok);
+    if (!ok) {
+        QMessageBox::warning(nullptr, "Warning", "ID not found");
+        return;
+    }
+    if (selected_id > itemWidgets.size() || selected_id <= 0) {
         QMessageBox::warning(nullptr, "Warning", "ID not found");
         return;
     }
