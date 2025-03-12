@@ -12,6 +12,13 @@ struct Movie {
 
     Movie(string t, string d) : title(t), date(d), availableSeats(4, vector<vector<bool>>(4, vector<bool>(10, true))) {}
 };
+struct Reservation {
+    string customerName;
+    string movieTitle;
+    string date;
+    int round;
+    int seatNumber;
+};
 
 void displaySchedule(const vector<Movie> &movies) {
     for (const auto &movie : movies) {
@@ -104,7 +111,12 @@ void makeReservation(vector<Movie> &movies) {
     for (auto &movie : movies) {
         if (movie.title == title && movie.date == date && round > 0 && round < 5) {
             displaySeats(movie, round);
-            cout << "Enter seat number (1-40): "; cin >> seat;
+            cout << "Enter seat number (1-40): "; 
+            cin >> seat;
+            if (seat < 0 || seat > 40) {
+                cout << "Invalid Seating"<< endl;
+                return;
+            }
             int row = (seat - 1) / 10, col = (seat - 1) % 10;
             
             if (movie.availableSeats[round - 1][row][col]) {
@@ -133,8 +145,16 @@ void cancelReservation(vector<Movie> &movies) {
     cin >> date;
     cout << "Enter round (1-4): "; 
     cin >> round;
+    if (round < 0 || round > 4) {
+        cout << "Invalid Round" << endl;
+        return;
+    }
     cout << "Enter seat number (1-40): "; 
     cin >> seat;
+    if (seat < 0 || seat > 40) {
+        cout <<  "Invalid Seating" <<endl;
+        return;
+    }
     
     for (auto &movie : movies) {
         if (movie.title == title && movie.date == date) {
