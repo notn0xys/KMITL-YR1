@@ -9,7 +9,7 @@ class Wheel {
 };
 class Car {
     public:
-    Car(pair<int, string> w1, pair<int, string> w2, pair<int, string> w3, pair<int, string> w4 ): wheel1(w1.first(),w1.second()) {}
+    Car(pair<int, string> w1, pair<int, string> w2, pair<int, string> w3, pair<int, string> w4 ): wheel1(w1.first,w1.second),wheel2(w2.first,w2.second),wheel3(w3.first,w3.second),wheel4(w4.first,w4.second) {}
         Wheel wheel1;
         Wheel wheel2;
         Wheel wheel3;
